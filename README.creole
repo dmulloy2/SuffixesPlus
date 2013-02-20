@@ -1,0 +1,2 @@
+=SuffixesPlus=
+A little plugin I whipped up in 30 minutes that lets players set their own prefix and/or suffix if they have the correct permission

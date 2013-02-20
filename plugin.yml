@@ -1,0 +1,55 @@
+name: SuffixesPlus
+main: net.dmulloy2.suffixesplus.SuffixesPlus
+version: 1.0
+description: Makes it easier to set your suffix
+author: dmulloy2
+depend: [GroupManager]
+commands:
+  prefix:
+    description: Sets your prefix
+    permission: sp.prefix
+    usage: /<command> <args>
+    aliases: [pre]
+  suffix:
+    description: Sets your suffix
+    permission: sp.suffix
+    usage: /<command> <args>
+    aliases: [suf]
+  prefixr:
+    description: Reset a player's prefix
+    permission: sp.prefixr
+    usage: /<command> <player>
+    aliases: [prer]
+  suffixr:
+    description: Reset a player's suffix
+    permission: sp.suffixr
+    usage: /<command> <player>
+    aliases: [sufr]
+  suffixesplus:
+    description: SuffixesPlus root command
+    usage: /<command>
+permissions:
+  sp.*:
+    description: Allows access to all SuffixesPlus features
+    children:
+      sp.highroller: true
+      sp.moderator: true
+  sp.highroller:
+    description: Allows access to suffix and prefix
+    children:
+      sp.prefix: true
+      sp.suffix: true
+  sp.moderator:
+    description: Allows access to prefix and suffix reset
+    children:
+      sp.prefixr: true
+      sp.suffixr: true
+  sp.suffix:
+    default: false
+  sp.prefix:
+    default: false
+  sp.prefixr:
+    default: false
+  sp.suffixr:
+    default: false
+    
