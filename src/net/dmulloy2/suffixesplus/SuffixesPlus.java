@@ -3,6 +3,13 @@ package net.dmulloy2.suffixesplus;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.dmulloy2.suffixesplus.commands.CmdPrefix;
+import net.dmulloy2.suffixesplus.commands.CmdPrefixR;
+import net.dmulloy2.suffixesplus.commands.CmdSP;
+import net.dmulloy2.suffixesplus.commands.CmdSuffix;
+import net.dmulloy2.suffixesplus.commands.CmdSuffixR;
+import net.dmulloy2.suffixesplus.listeners.TagListener;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -12,6 +19,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class SuffixesPlus extends JavaPlugin
 {
 	private static Logger log;
+	private TagListener taglistener = new TagListener(this);
+	
 	
 	public void onEnable()
 	{
@@ -31,6 +40,7 @@ public class SuffixesPlus extends JavaPlugin
 		
 		PluginManager pm = getServer().getPluginManager();
 		checkGroupManager(pm);
+		pm.registerEvents(this.taglistener,this);
 	}
 	
 	public void onDisable()

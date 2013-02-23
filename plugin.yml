@@ -4,6 +4,7 @@ version: 1.0
 description: Makes it easier to set your suffix
 author: dmulloy2
 depend: [GroupManager]
+softdepend: [TagAPI]
 commands:
   prefix:
     description: Sets your prefix
