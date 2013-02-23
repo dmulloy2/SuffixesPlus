@@ -3,11 +3,7 @@ package net.dmulloy2.suffixesplus;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.dmulloy2.suffixesplus.commands.CmdPrefix;
-import net.dmulloy2.suffixesplus.commands.CmdPrefixR;
-import net.dmulloy2.suffixesplus.commands.CmdSP;
-import net.dmulloy2.suffixesplus.commands.CmdSuffix;
-import net.dmulloy2.suffixesplus.commands.CmdSuffixR;
+import net.dmulloy2.suffixesplus.commands.*;
 import net.dmulloy2.suffixesplus.listeners.TagListener;
 
 import org.bukkit.ChatColor;
