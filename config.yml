@@ -1,0 +1,12 @@
+#########################################################################################################
+#                                                                                                       #
+#                                     Suffixes Plus Configuration                                       #
+#                                         Created by: dmulloy2                                          #
+#                                                                                                       #
+#########################################################################################################
+
+#The max length a prefix can be (not counting color codes and brackets)
+maxprefixlength: 10
+
+#The max length a suffix can be (not counting color codes and brackets)
+maxsuffixlength: 10

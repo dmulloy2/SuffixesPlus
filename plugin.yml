@@ -1,10 +1,8 @@
 name: SuffixesPlus
 main: net.dmulloy2.suffixesplus.SuffixesPlus
-version: 1.0
-description: Makes it easier to set your suffix
-author: dmulloy2
-depend: [GroupManager]
-softdepend: [TagAPI]
+version: 2.3
+description: Allows players to set their own prefix or suffix if they have the right permission
+softdepend: [GroupManager, PermissionsEx]
 commands:
   prefix:
     description: Sets your prefix
@@ -29,22 +27,26 @@ commands:
   suffixesplus:
     description: SuffixesPlus root command
     usage: /<command>
+  listen:
+    description: Listen to another player
+    usage: /<command> <player>
+    aliases: [listento]
+  listening:
+    description: List players you are listening to
+    usage: /<command>
+    aliases: [listeningto]
 permissions:
-  sp.*:
-    description: Allows access to all SuffixesPlus features
-    children:
-      sp.highroller: true
-      sp.moderator: true
-  sp.highroller:
-    description: Allows access to suffix and prefix
-    children:
-      sp.prefix: true
-      sp.suffix: true
   sp.moderator:
     description: Allows access to prefix and suffix reset
     children:
       sp.prefixr: true
       sp.suffixr: true
+      sp.highroller: true
+  sp.highroller:
+    description: Allows access to suffix and prefix
+    children:
+      sp.prefix: true
+      sp.suffix: true
   sp.suffix:
     default: false
   sp.prefix:
@@ -53,4 +55,5 @@ permissions:
     default: false
   sp.suffixr:
     default: false
-    
+  sp.others:
+    default: false

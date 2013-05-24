@@ -1,9 +1,16 @@
+/**
+ * (c) 2013 dmulloy2
+ */
 package net.dmulloy2.suffixesplus.util;
 
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+/**
+ * @author dmulloy2
+ */
 
 public class Util 
 {
