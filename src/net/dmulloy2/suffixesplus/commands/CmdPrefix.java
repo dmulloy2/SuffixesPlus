@@ -29,11 +29,11 @@ public class CmdPrefix implements CommandExecutor
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		if (sender instanceof Player)
+		PluginManager pm = plugin.getServer().getPluginManager();
+		int maxlength = plugin.maxprefixlength;
+		if (args.length == 1)
 		{
-			PluginManager pm = plugin.getServer().getPluginManager();
-			int maxlength = plugin.maxprefixlength;
-			if (args.length == 1)
+			if (sender instanceof Player)
 			{
 				String argscheck = args[0].toString().replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
 				if (argscheck.length() <= maxlength)
@@ -60,50 +60,50 @@ public class CmdPrefix implements CommandExecutor
 					sender.sendMessage(ChatColor.RED + "Error, Your prefix is too long (Max 10 Characters)");
 				}
 			}
-			else if (args.length == 2)
+			else
 			{
-				if (sender.hasPermission("sp.others"))
+				sender.sendMessage(ChatColor.RED + "Console cannot have a prefix!");
+			}
+		}
+		else if (args.length == 2)
+		{
+			if (sender.hasPermission("sp.others"))
+			{
+				Player target = Util.matchPlayer(args[0]);
+				if (target != null)
 				{
-					Player target = Util.matchPlayer(args[0]);
-					if (target != null)
+					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
+					String newPrefix = args[1].toString();
+					if (pm.isPluginEnabled("GroupManager"))
 					{
-						ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-						String newPrefix = args[1].toString();
-						if (pm.isPluginEnabled("GroupManager"))
-						{
-							plugin.getServer().dispatchCommand(ccs, "manuaddv " + target.getName() + " prefix " + newPrefix + "&r");
-							sender.sendMessage(ChatColor.AQUA + target.getName() + "'s prefix is now " + newPrefix);
-							target.sendMessage(ChatColor.AQUA + "Your prefix is now '" + newPrefix + "'");
-						}
-						else if (pm.isPluginEnabled("PermissionsEx"))
-						{
-							plugin.getServer().dispatchCommand(ccs, "pex user " + target.getName() + " prefix \"" + newPrefix + "\"&r");
-							sender.sendMessage(ChatColor.AQUA + target.getName() + "'s prefix is now " + newPrefix);
-							target.sendMessage(ChatColor.AQUA + "Your prefix is now '" + newPrefix + "'");	  
-						}
-						else
-						{
-							sender.sendMessage(ChatColor.RED + "Neither PEX nor GroupManager was found");
-						}
+						plugin.getServer().dispatchCommand(ccs, "manuaddv " + target.getName() + " prefix " + newPrefix + "&r");
+						sender.sendMessage(ChatColor.AQUA + target.getName() + "'s prefix is now " + newPrefix);
+						target.sendMessage(ChatColor.AQUA + "Your prefix is now '" + newPrefix + "'");
+					}
+					else if (pm.isPluginEnabled("PermissionsEx"))
+					{
+						plugin.getServer().dispatchCommand(ccs, "pex user " + target.getName() + " prefix \"" + newPrefix + "\"&r");
+						sender.sendMessage(ChatColor.AQUA + target.getName() + "'s prefix is now " + newPrefix);
+						target.sendMessage(ChatColor.AQUA + "Your prefix is now '" + newPrefix + "'");	  
 					}
 					else
 					{
-						sender.sendMessage(ChatColor.RED + "Player not found");
+						sender.sendMessage(ChatColor.RED + "Neither PEX nor GroupManager was found");
 					}
 				}
 				else
 				{
-					sender.sendMessage(ChatColor.RED + "You do not have permission to preform this command");
+					sender.sendMessage(ChatColor.RED + "Player not found");
 				}
 			}
 			else
 			{
-				sender.sendMessage(ChatColor.RED + "Invalid arguments count (/pre [player] <prefix>)");
+				sender.sendMessage(ChatColor.RED + "You do not have permission to preform this command");
 			}
 		}
 		else
 		{
-			sender.sendMessage(ChatColor.RED + "You must be a player to use this command");
+			sender.sendMessage(ChatColor.RED + "Invalid arguments count (/pre [player] <prefix>)");
 		}
 		return true;
 	}
