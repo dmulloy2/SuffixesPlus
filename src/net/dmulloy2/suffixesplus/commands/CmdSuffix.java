@@ -56,12 +56,12 @@ public class CmdSuffix implements CommandExecutor
 				}
 				else
 				{
-					sender.sendMessage(ChatColor.RED + "Console cannot have a suffix!");
+					sender.sendMessage(ChatColor.RED + "Error, your suffix is too long (Max 10 characters)");
 				}
 			}
 			else
 			{
-				sender.sendMessage(ChatColor.RED + "Error, your suffix is too long (Max 10 characters)");
+				sender.sendMessage(ChatColor.RED + "Console cannot have a suffix!");
 			}
 		}
 		else if (args.length == 2)
