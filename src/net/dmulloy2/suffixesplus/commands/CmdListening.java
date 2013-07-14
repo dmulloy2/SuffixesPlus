@@ -29,17 +29,17 @@ public class CmdListening implements CommandExecutor
 			{
 				if (plugin.isListenedToBy(p1, p2))
 				{
-					listening.append(" " + p1.getDisplayName() + ",");
+					listening.append(p1.getDisplayName() + ", ");
 					listenamt++;
 				}
 			}
 			if (listenamt == 0)
 			{
-				listening.append("nobody.");
+				listening.append(" nobody.");
 			}
 			else
 			{
-				listening.replace(listening.length()-1, listening.length(), ".");
+				listening.replace(listening.length()-2, listening.length(), ".");
 			}
 			sender.sendMessage(listening.toString());
 		}
@@ -47,6 +47,7 @@ public class CmdListening implements CommandExecutor
 		{
 			sender.sendMessage(ChatColor.RED + "This command cannot be executed from the console.");	
 		}
+		
 		return true;
 	}
 }

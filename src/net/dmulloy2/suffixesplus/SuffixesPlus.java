@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import net.dmulloy2.suffixesplus.commands.*;
+import net.dmulloy2.suffixesplus.util.FormatUtil;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,16 +34,21 @@ public class SuffixesPlus extends JavaPlugin
 		long start = System.currentTimeMillis();
 		
 		PluginManager pm = getServer().getPluginManager();
-		permsPluginCheck(pm);
+		if (! permsPluginCheck(pm))
+			return;
+		
 		pm.registerEvents(new ChatListener(this), this);
 		
-		getCommand("prefix").setExecutor(new CmdPrefix (this));
-		getCommand("suffix").setExecutor(new CmdSuffix (this));
-		getCommand("prefixr").setExecutor(new CmdPrefixR (this));
-		getCommand("suffixr").setExecutor(new CmdSuffixR (this));
-		getCommand("suffixesplus").setExecutor(new CmdSP (this));
-		getCommand("listening").setExecutor(new CmdListening (this));
-		getCommand("listen").setExecutor(new CmdListen (this));
+		getCommand("prefix").setExecutor(new CmdPrefix(this));
+		getCommand("suffix").setExecutor(new CmdSuffix(this));
+		
+		getCommand("prefixr").setExecutor(new CmdPrefixR(this));
+		getCommand("suffixr").setExecutor(new CmdSuffixR(this));
+		
+		getCommand("suffixesplus").setExecutor(new CmdSP(this));
+		
+		getCommand("listening").setExecutor(new CmdListening(this));
+		getCommand("listen").setExecutor(new CmdListen(this));
 		
 		getCommand("prefix").setPermissionMessage(noperm);
 		getCommand("suffix").setPermissionMessage(noperm);
@@ -73,28 +80,28 @@ public class SuffixesPlus extends JavaPlugin
 		outConsole(getDescription().getFullName() + " has been disabled ("+(finish-start)+"ms)");
 	}
 	
-	public void outConsole(String string)
+	public void outConsole(String string, Object...objects)
 	{
-		getLogger().info(string);
+		getLogger().info(FormatUtil.format(string, objects));
 	}
 	
-	public void outConsole(Level level, String string)
+	public void outConsole(Level level, String string, Object...objects)
 	{
-		getLogger().log(level, string);
+		getLogger().log(level, FormatUtil.format(string, objects));
 	}
 	
 	/**Check for Permissions Plugin**/
-	private void permsPluginCheck(PluginManager pm) 
+	private boolean permsPluginCheck(PluginManager pm) 
 	{
 		if (pm.isPluginEnabled("GroupManager")) 
 		{
 			outConsole("GroupManager found, using it for permissions hooks!");
-			return;
+			return true;
 		} 
 		else if (pm.isPluginEnabled("PermissionsEx"))
 		{
 			outConsole("PermissionsEx found, using it for permissions hooks!");
-			return;
+			return true;
 		}
 		else 
 		{
@@ -102,7 +109,7 @@ public class SuffixesPlus extends JavaPlugin
 			outConsole(Level.WARNING, "Disabling " + getDescription().getFullName());
 			
 			getPluginLoader().disablePlugin(this);
-			return;
+			return false;
 		}
 	}
 	
@@ -113,29 +120,33 @@ public class SuffixesPlus extends JavaPlugin
 		maxprefixlength = getConfig().getInt("maxprefixlength");
 	}
 
-	/**Display Help**/
+	/** Display Help **/
 	public void displayHelp(CommandSender sender) 
 	{
-		sender.sendMessage(ChatColor.DARK_RED + "====== " + ChatColor.GOLD + getDescription().getFullName() + ChatColor.DARK_RED + " ======");
-		sender.sendMessage(ChatColor.RED + "/<command>" + ChatColor.GOLD + " [optional] " + ChatColor.DARK_RED + "<required>");
+		List<String> lines = new ArrayList<String>();
+		lines.add(FormatUtil.format("&4=====[ &6{0} &4]=====", getDescription().getFullName()));
+		lines.add(FormatUtil.format("&c/<command> &6[optional] &4<required>"));
 		if (sender.hasPermission("sp.suffix"))
 		{
-			sender.sendMessage(ChatColor.RED + "/suffix" + ChatColor.GOLD + " [player]" + ChatColor.DARK_RED + " <suffix> " + ChatColor.YELLOW + "Changes your suffix");
+			lines.add(FormatUtil.format("&c/suffix &6[player] &4<suffix> &eChanges your suffix"));
 		}
+		
 		if (sender.hasPermission("sp.prefix"))
 		{
-			sender.sendMessage(ChatColor.RED + "/prefix" + ChatColor.GOLD + " [player]" +  ChatColor.DARK_RED + " <suffix> " + ChatColor.YELLOW + "Changes your prefix");
+			lines.add(FormatUtil.format("&c/prefix &6[player] &4<suffix> &eChanges your prefix"));
 		}
+		
 		if (sender.hasPermission("sp.moderator"))
 		{
-			sender.sendMessage(ChatColor.RED + "/suffixr" + ChatColor.GOLD + " [player] " + ChatColor.YELLOW + "Resets a player's suffix");
-			sender.sendMessage(ChatColor.RED + "/prefixr" + ChatColor.GOLD + " [player] " + ChatColor.YELLOW + "Resets a player's prefix");
-			sender.sendMessage(ChatColor.RED + "/listen" +  ChatColor.DARK_RED + " <player> " + ChatColor.YELLOW + "Listen to another player");
-			sender.sendMessage(ChatColor.RED + "/listening" + ChatColor.YELLOW + " Check who you are listening to");
+			lines.add(FormatUtil.format("&c/suffixr &6[player] &eResets a player's suffix"));
+			lines.add(FormatUtil.format("&c/prefixr &6[player] &eResets a player's prefix"));
 		}
+		
+		lines.add(FormatUtil.format("&c/listen &4<player> &eListen to another player"));
+		lines.add(FormatUtil.format("&c/listening &eCheck who you are listening to"));
 	}
 	
-	/**Listening**/
+	/** Listening **/
 	public boolean isListenedToBy(Player p1, Player p2)
 	{
 		return listenedToBy.get(p1).contains(p2);
@@ -153,6 +164,7 @@ public class SuffixesPlus extends JavaPlugin
 			if(listenedToBy.get(p1).contains(p2))
 				listenedToBy.get(p1).remove(p2);
 		}
+		
 		listenedToBy.remove(p2);
 	}
 }

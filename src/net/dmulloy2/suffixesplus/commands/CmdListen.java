@@ -62,6 +62,7 @@ public class CmdListen implements CommandExecutor
 		{
 			sender.sendMessage(ChatColor.RED + "This command cannot be executed from the console.");	
 		}
+		
 		return true;
 	}
 }
