@@ -14,14 +14,16 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
+import com.shadowvolt.shadowvolt.ColorManager;
+
 /**
  * @author dmulloy2
  */
 
 public class CmdPrefix implements CommandExecutor
 {
-	public SuffixesPlus plugin;
-	public CmdPrefix(SuffixesPlus plugin)  
+	private final SuffixesPlus plugin;
+	public CmdPrefix(final SuffixesPlus plugin)  
 	{
 		this.plugin = plugin;
 	}
@@ -35,11 +37,16 @@ public class CmdPrefix implements CommandExecutor
 		{
 			if (sender instanceof Player)
 			{
-				String argscheck = args[0].toString().replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
+				String argscheck = args[0].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
 				if (argscheck.length() <= maxlength)
 				{
+					String newPrefix = args[0];
+					if (pm.isPluginEnabled("Shadowvolt"))
+					{
+						newPrefix = ColorManager.getRainbowizedString(newPrefix);
+					}
+					
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-					String newPrefix = args[0].toString();
 					if (pm.isPluginEnabled("GroupManager"))
 					{
 						plugin.getServer().dispatchCommand(ccs, "manuaddv " + sender.getName() + " prefix " + newPrefix + "&r");
@@ -72,8 +79,13 @@ public class CmdPrefix implements CommandExecutor
 				Player target = Util.matchPlayer(args[0]);
 				if (target != null)
 				{
+					String newPrefix = args[1];
+					if (pm.isPluginEnabled("Shadowvolt"))
+					{
+						newPrefix = ColorManager.getRainbowizedString(newPrefix);
+					}
+					
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-					String newPrefix = args[1].toString();
 					if (pm.isPluginEnabled("GroupManager"))
 					{
 						plugin.getServer().dispatchCommand(ccs, "manuaddv " + target.getName() + " prefix " + newPrefix + "&r");
@@ -105,6 +117,7 @@ public class CmdPrefix implements CommandExecutor
 		{
 			sender.sendMessage(ChatColor.RED + "Invalid arguments count (/pre [player] <prefix>)");
 		}
+		
 		return true;
 	}
 }

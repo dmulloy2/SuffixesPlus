@@ -19,8 +19,8 @@ import org.bukkit.entity.Player;
 
 public class CmdPrefixR implements CommandExecutor
 {
-	public SuffixesPlus plugin;
-	public CmdPrefixR(SuffixesPlus plugin)  
+	private final SuffixesPlus plugin;
+	public CmdPrefixR(final SuffixesPlus plugin)  
 	{
 		this.plugin = plugin;
 	}

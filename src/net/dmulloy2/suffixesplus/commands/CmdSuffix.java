@@ -14,14 +14,16 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
+import com.shadowvolt.shadowvolt.ColorManager;
+
 /**
  * @author dmulloy2
  */
 
 public class CmdSuffix implements CommandExecutor
 {	
-	public SuffixesPlus plugin;
-	public CmdSuffix(SuffixesPlus plugin)  
+	private final SuffixesPlus plugin;
+	public CmdSuffix(final SuffixesPlus plugin)  
 	{
 		this.plugin = plugin;
 	}
@@ -33,12 +35,17 @@ public class CmdSuffix implements CommandExecutor
 		{
 			if (sender instanceof Player)
 			{
-				String argscheck = args[0].toString().replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
+				String argscheck = args[0].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
 				if (argscheck.length() <= 10)
 				{
-					String newSuffix = args[0].toString();
-					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
+					String newSuffix = args[0];
 					PluginManager pm = plugin.getServer().getPluginManager();
+					if (pm.isPluginEnabled("Shadowvolt"))
+					{
+						newSuffix = ColorManager.getRainbowizedString(newSuffix);
+					}
+					
+					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
 					if (pm.isPluginEnabled("GroupManager"))
 					{
 						plugin.getServer().dispatchCommand(ccs, "manuaddv " + sender.getName() + " suffix " + newSuffix + "&r");
@@ -68,12 +75,17 @@ public class CmdSuffix implements CommandExecutor
 		{
 			if (sender.hasPermission("sp.others"))
 			{
-				String newSuffix = args[1].toString();
 				Player target = Util.matchPlayer(args[0]);
-				ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-				PluginManager pm = plugin.getServer().getPluginManager();
 				if (target != null)
 				{
+					String newSuffix = args[0];
+					PluginManager pm = plugin.getServer().getPluginManager();
+					if (pm.isPluginEnabled("Shadowvolt"))
+					{
+						newSuffix = ColorManager.getRainbowizedString(newSuffix);
+					}
+				
+					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
 					if (pm.isPluginEnabled("GroupManager"))
 					{
 						plugin.getServer().dispatchCommand(ccs, "manuaddv " + target.getName() + " suffix " + newSuffix + "&r");

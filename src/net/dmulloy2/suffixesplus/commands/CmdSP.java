@@ -15,8 +15,8 @@ import org.bukkit.command.CommandSender;
 
 public class CmdSP implements CommandExecutor
 {
-	public SuffixesPlus plugin;
-	public CmdSP(SuffixesPlus plugin)  
+	private final SuffixesPlus plugin;
+	public CmdSP(final SuffixesPlus plugin)  
 	{
 		this.plugin = plugin;
 	}
