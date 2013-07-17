@@ -4,6 +4,7 @@
 package net.dmulloy2.suffixesplus.commands;
 
 import net.dmulloy2.suffixesplus.SuffixesPlus;
+import net.dmulloy2.suffixesplus.util.FormatUtil;
 import net.dmulloy2.suffixesplus.util.Util;
 
 import org.bukkit.ChatColor;
@@ -50,12 +51,12 @@ public class CmdPrefix implements CommandExecutor
 					if (pm.isPluginEnabled("GroupManager"))
 					{
 						plugin.getServer().dispatchCommand(ccs, "manuaddv " + sender.getName() + " prefix " + newPrefix + "&r");
-						sender.sendMessage(ChatColor.AQUA + "Your prefix is now '" + newPrefix + "'");
+						sender.sendMessage(FormatUtil.format("&bYour prefix is now ''{0}&b''", newPrefix));
 					}
 					else if (pm.isPluginEnabled("PermissionsEx"))
 					{
 						plugin.getServer().dispatchCommand(ccs, "pex user " + sender.getName() + " prefix \"" + newPrefix + "\"&r");
-						sender.sendMessage(ChatColor.AQUA + "Your prefix is now '" + newPrefix + "'");
+						sender.sendMessage(FormatUtil.format("&bYour prefix is now ''{0}&b''", newPrefix));
 					}
 					else
 					{
@@ -89,14 +90,14 @@ public class CmdPrefix implements CommandExecutor
 					if (pm.isPluginEnabled("GroupManager"))
 					{
 						plugin.getServer().dispatchCommand(ccs, "manuaddv " + target.getName() + " prefix " + newPrefix + "&r");
-						sender.sendMessage(ChatColor.AQUA + target.getName() + "'s prefix is now " + newPrefix);
-						target.sendMessage(ChatColor.AQUA + "Your prefix is now '" + newPrefix + "'");
+						sender.sendMessage(FormatUtil.format("&b{0}''s prefix is now ''{1}&b''", target.getName(), newPrefix));
+						target.sendMessage(FormatUtil.format("&bYour prefix is now ''{0}&b''", newPrefix));
 					}
 					else if (pm.isPluginEnabled("PermissionsEx"))
 					{
 						plugin.getServer().dispatchCommand(ccs, "pex user " + target.getName() + " prefix \"" + newPrefix + "\"&r");
-						sender.sendMessage(ChatColor.AQUA + target.getName() + "'s prefix is now " + newPrefix);
-						target.sendMessage(ChatColor.AQUA + "Your prefix is now '" + newPrefix + "'");	  
+						sender.sendMessage(FormatUtil.format("&b{0}''s prefix is now ''{1}&b''", target.getName(), newPrefix));
+						target.sendMessage(FormatUtil.format("&bYour prefix is now ''{0}&b''", newPrefix));
 					}
 					else
 					{

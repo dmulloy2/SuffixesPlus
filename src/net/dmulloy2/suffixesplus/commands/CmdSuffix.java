@@ -4,6 +4,7 @@
 package net.dmulloy2.suffixesplus.commands;
 
 import net.dmulloy2.suffixesplus.SuffixesPlus;
+import net.dmulloy2.suffixesplus.util.FormatUtil;
 import net.dmulloy2.suffixesplus.util.Util;
 
 import org.bukkit.ChatColor;
@@ -49,12 +50,12 @@ public class CmdSuffix implements CommandExecutor
 					if (pm.isPluginEnabled("GroupManager"))
 					{
 						plugin.getServer().dispatchCommand(ccs, "manuaddv " + sender.getName() + " suffix " + newSuffix + "&r");
-						sender.sendMessage(ChatColor.AQUA + "Your suffix is now '" + newSuffix + "'");
+						sender.sendMessage(FormatUtil.format("&bYour suffix is now ''{0}&b''", newSuffix));
 					}
 					else if (pm.isPluginEnabled("PermissionsEx"))
 					{
 						plugin.getServer().dispatchCommand(ccs, "pex user " + sender.getName() + " suffix \"" + newSuffix + "\"&r");
-						sender.sendMessage(ChatColor.AQUA + "Your suffix is now '" + newSuffix + "'");
+						sender.sendMessage(FormatUtil.format("&bYour suffix is now ''{0}&b''", newSuffix));
 					}
 					else
 					{
@@ -89,14 +90,14 @@ public class CmdSuffix implements CommandExecutor
 					if (pm.isPluginEnabled("GroupManager"))
 					{
 						plugin.getServer().dispatchCommand(ccs, "manuaddv " + target.getName() + " suffix " + newSuffix + "&r");
-						sender.sendMessage(ChatColor.AQUA + target.getName() + "'s suffix is now " + newSuffix);
-						target.sendMessage(ChatColor.AQUA + "Your suffix is now '" + newSuffix + "'");
+						sender.sendMessage(FormatUtil.format("&b{0}''s suffix is now ''{1}&b''", target.getName(), newSuffix));
+						target.sendMessage(FormatUtil.format("&bYour suffix is now ''{0}&b''", newSuffix));
 					}
 					else if (pm.isPluginEnabled("PermissionsEx"))
 					{
 						plugin.getServer().dispatchCommand(ccs, "pex user " + target.getName() + " suffix \"" + newSuffix + "\"&r");
-						sender.sendMessage(ChatColor.AQUA + target.getName() + "'s suffix is now " + newSuffix);
-						target.sendMessage(ChatColor.AQUA + "Your suffix is now '" + newSuffix + "'");	  
+						sender.sendMessage(FormatUtil.format("&a{0}''s suffix is now ''{1}&b''", target.getName(), newSuffix));
+						target.sendMessage(FormatUtil.format("&bYour suffix is now ''{0}&b''", newSuffix));  
 					}
 					else
 					{
