@@ -79,7 +79,7 @@ public class CmdSuffix implements CommandExecutor
 				Player target = Util.matchPlayer(args[0]);
 				if (target != null)
 				{
-					String newSuffix = args[0];
+					String newSuffix = args[1];
 					PluginManager pm = plugin.getServer().getPluginManager();
 					if (pm.isPluginEnabled("Shadowvolt"))
 					{
