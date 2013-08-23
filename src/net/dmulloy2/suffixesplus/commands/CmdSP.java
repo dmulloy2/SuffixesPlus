@@ -16,15 +16,16 @@ import org.bukkit.command.CommandSender;
 public class CmdSP implements CommandExecutor
 {
 	private final SuffixesPlus plugin;
-	public CmdSP(final SuffixesPlus plugin)  
+
+	public CmdSP(final SuffixesPlus plugin)
 	{
 		this.plugin = plugin;
 	}
-	  
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		plugin.displayHelp(sender);		  
+		plugin.displayHelp(sender);
 		return true;
 	}
 }

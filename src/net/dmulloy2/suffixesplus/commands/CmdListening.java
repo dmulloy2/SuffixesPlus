@@ -11,11 +11,12 @@ import org.bukkit.entity.Player;
 public class CmdListening implements CommandExecutor
 {
 	public SuffixesPlus plugin;
-	public CmdListening(SuffixesPlus plugin)  
+
+	public CmdListening(SuffixesPlus plugin)
 	{
 		this.plugin = plugin;
 	}
-	 
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
@@ -25,7 +26,7 @@ public class CmdListening implements CommandExecutor
 			StringBuilder listening = new StringBuilder();
 			listening.append(ChatColor.GOLD + "You are listening to: " + ChatColor.AQUA);
 			int listenamt = 0;
-			for (Player p1 : plugin.getServer().getOnlinePlayers()) 
+			for (Player p1 : plugin.getServer().getOnlinePlayers())
 			{
 				if (plugin.isListenedToBy(p1, p2))
 				{
@@ -39,15 +40,15 @@ public class CmdListening implements CommandExecutor
 			}
 			else
 			{
-				listening.replace(listening.length()-2, listening.length(), ".");
+				listening.replace(listening.length() - 2, listening.length(), ".");
 			}
 			sender.sendMessage(listening.toString());
 		}
 		else
 		{
-			sender.sendMessage(ChatColor.RED + "This command cannot be executed from the console.");	
+			sender.sendMessage(ChatColor.RED + "This command cannot be executed from the console.");
 		}
-		
+
 		return true;
 	}
 }

@@ -24,11 +24,12 @@ import com.shadowvolt.shadowvolt.ColorManager;
 public class CmdPrefix implements CommandExecutor
 {
 	private final SuffixesPlus plugin;
-	public CmdPrefix(final SuffixesPlus plugin)  
+
+	public CmdPrefix(final SuffixesPlus plugin)
 	{
 		this.plugin = plugin;
 	}
-	 
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
@@ -46,7 +47,7 @@ public class CmdPrefix implements CommandExecutor
 					{
 						newPrefix = ColorManager.getRainbowizedString(newPrefix);
 					}
-					
+
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
 					if (pm.isPluginEnabled("GroupManager"))
 					{
@@ -85,7 +86,7 @@ public class CmdPrefix implements CommandExecutor
 					{
 						newPrefix = ColorManager.getRainbowizedString(newPrefix);
 					}
-					
+
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
 					if (pm.isPluginEnabled("GroupManager"))
 					{
@@ -118,7 +119,7 @@ public class CmdPrefix implements CommandExecutor
 		{
 			sender.sendMessage(ChatColor.RED + "Invalid arguments count (/pre [player] <prefix>)");
 		}
-		
+
 		return true;
 	}
 }

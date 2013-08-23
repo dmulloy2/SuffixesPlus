@@ -22,13 +22,14 @@ import com.shadowvolt.shadowvolt.ColorManager;
  */
 
 public class CmdSuffix implements CommandExecutor
-{	
+{
 	private final SuffixesPlus plugin;
-	public CmdSuffix(final SuffixesPlus plugin)  
+
+	public CmdSuffix(final SuffixesPlus plugin)
 	{
 		this.plugin = plugin;
 	}
-	  
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
@@ -45,7 +46,7 @@ public class CmdSuffix implements CommandExecutor
 					{
 						newSuffix = ColorManager.getRainbowizedString(newSuffix);
 					}
-					
+
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
 					if (pm.isPluginEnabled("GroupManager"))
 					{
@@ -85,7 +86,7 @@ public class CmdSuffix implements CommandExecutor
 					{
 						newSuffix = ColorManager.getRainbowizedString(newSuffix);
 					}
-				
+
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
 					if (pm.isPluginEnabled("GroupManager"))
 					{
@@ -97,7 +98,7 @@ public class CmdSuffix implements CommandExecutor
 					{
 						plugin.getServer().dispatchCommand(ccs, "pex user " + target.getName() + " suffix \"" + newSuffix + "\"&r");
 						sender.sendMessage(FormatUtil.format("&a{0}''s suffix is now ''{1}&b''", target.getName(), newSuffix));
-						target.sendMessage(FormatUtil.format("&bYour suffix is now ''{0}&b''", newSuffix));  
+						target.sendMessage(FormatUtil.format("&bYour suffix is now ''{0}&b''", newSuffix));
 					}
 					else
 					{

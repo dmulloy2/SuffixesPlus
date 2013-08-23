@@ -20,11 +20,12 @@ import org.bukkit.entity.Player;
 public class CmdSuffixR implements CommandExecutor
 {
 	private final SuffixesPlus plugin;
-	public CmdSuffixR(final SuffixesPlus plugin)  
+
+	public CmdSuffixR(final SuffixesPlus plugin)
 	{
 		this.plugin = plugin;
 	}
-	
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
@@ -60,7 +61,7 @@ public class CmdSuffixR implements CommandExecutor
 		{
 			sender.sendMessage(ChatColor.RED + "Invalid arguments count (/sufr [player])");
 		}
-		  
+
 		return true;
 	}
 }

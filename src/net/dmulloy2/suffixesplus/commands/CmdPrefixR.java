@@ -20,11 +20,12 @@ import org.bukkit.entity.Player;
 public class CmdPrefixR implements CommandExecutor
 {
 	private final SuffixesPlus plugin;
-	public CmdPrefixR(final SuffixesPlus plugin)  
+
+	public CmdPrefixR(final SuffixesPlus plugin)
 	{
 		this.plugin = plugin;
 	}
-	  
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
