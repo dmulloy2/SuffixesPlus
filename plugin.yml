@@ -1,6 +1,6 @@
 name: SuffixesPlus
 main: net.dmulloy2.suffixesplus.SuffixesPlus
-version: 2.3.1
+version: 2.3.2
 description: Allows players to set their own prefix or suffix if they have the right permission
 softdepend: [GroupManager, PermissionsEx, Shadowvolt]
 commands:

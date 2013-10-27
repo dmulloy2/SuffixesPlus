@@ -15,7 +15,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
-import com.shadowvolt.shadowvolt.ColorManager;
+import com.shadowvolt.shadowvolt.util.ColorUtil;
 
 /**
  * @author dmulloy2
@@ -24,8 +24,7 @@ import com.shadowvolt.shadowvolt.ColorManager;
 public class CmdPrefix implements CommandExecutor
 {
 	private final SuffixesPlus plugin;
-
-	public CmdPrefix(final SuffixesPlus plugin)
+	public CmdPrefix(SuffixesPlus plugin)
 	{
 		this.plugin = plugin;
 	}
@@ -45,7 +44,7 @@ public class CmdPrefix implements CommandExecutor
 					String newPrefix = args[0];
 					if (pm.isPluginEnabled("Shadowvolt"))
 					{
-						newPrefix = ColorManager.getRainbowizedString(newPrefix);
+						newPrefix = ColorUtil.getRainbowizedString(newPrefix);
 					}
 
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
@@ -84,7 +83,7 @@ public class CmdPrefix implements CommandExecutor
 					String newPrefix = args[1];
 					if (pm.isPluginEnabled("Shadowvolt"))
 					{
-						newPrefix = ColorManager.getRainbowizedString(newPrefix);
+						newPrefix = ColorUtil.getRainbowizedString(newPrefix);
 					}
 
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
