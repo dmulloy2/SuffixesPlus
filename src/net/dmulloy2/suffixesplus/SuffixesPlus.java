@@ -1,21 +1,26 @@
 package net.dmulloy2.suffixesplus;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
+import lombok.Getter;
+import net.dmulloy2.suffixesplus.commands.CmdHelp;
 import net.dmulloy2.suffixesplus.commands.CmdListen;
 import net.dmulloy2.suffixesplus.commands.CmdListening;
 import net.dmulloy2.suffixesplus.commands.CmdPrefix;
-import net.dmulloy2.suffixesplus.commands.CmdPrefixR;
-import net.dmulloy2.suffixesplus.commands.CmdSP;
+import net.dmulloy2.suffixesplus.commands.CmdPrefixReset;
+import net.dmulloy2.suffixesplus.commands.CmdReload;
 import net.dmulloy2.suffixesplus.commands.CmdSuffix;
-import net.dmulloy2.suffixesplus.commands.CmdSuffixR;
+import net.dmulloy2.suffixesplus.commands.CmdSuffixReset;
+import net.dmulloy2.suffixesplus.handlers.CommandHandler;
+import net.dmulloy2.suffixesplus.handlers.LogHandler;
+import net.dmulloy2.suffixesplus.handlers.PermissionHandler;
+import net.dmulloy2.suffixesplus.listeners.ChatListener;
 import net.dmulloy2.suffixesplus.util.FormatUtil;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,50 +31,71 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class SuffixesPlus extends JavaPlugin
 {
-	public int maxsuffixlength, maxprefixlength;
+	private @Getter PermissionHandler permissionHandler;
+	private @Getter CommandHandler commandHandler;
+	private @Getter LogHandler logHandler;
 
-	public HashMap<Player, List<Player>> listenedToBy = new HashMap<Player, List<Player>>();
+	private @Getter HashMap<String, List<String>> listenedToBy;
 
-	public String noperm = ChatColor.RED + "You do not have permission to perform this command";
+	private @Getter String prefix = FormatUtil.format("&6[&4&lSP&6] ");
 
 	@Override
 	public void onEnable()
 	{
 		long start = System.currentTimeMillis();
 
-		PluginManager pm = getServer().getPluginManager();
-		if (!permsPluginCheck(pm))
-			return;
+		// Configuration stuff
+        File conf = new File(getDataFolder(), "config.yml");
+        if (! conf.exists())
+        {
+        	outConsole("Config not found. Generating a new one.");
+        	saveDefaultConfig();
+        }
+        else
+        {
+        	if (! getConfig().isSet("maxLengths.prefix"))
+        	{
+        		conf.renameTo(new File(getDataFolder(), "oldConfig.yml"));
+        		
+        		outConsole("Your config is out of date. Generating a new one.");
+        		
+        		saveDefaultConfig();
+        	}
+        }
 
+        reloadConfig();
+
+		// Register handlers
+		permissionHandler = new PermissionHandler();
+		commandHandler = new CommandHandler(this);
+		logHandler = new LogHandler(this);
+
+		// Prefixed Commands
+		commandHandler.setCommandPrefix("suffixesplus");
+		commandHandler.registerPrefixedCommand(new CmdHelp(this));
+		commandHandler.registerPrefixedCommand(new CmdReload(this));
+
+		// Non Prefixed Commands
+		commandHandler.registerCommand(new CmdListen(this));
+		commandHandler.registerCommand(new CmdListening(this));
+		commandHandler.registerCommand(new CmdPrefix(this));
+		commandHandler.registerCommand(new CmdPrefixReset(this));
+		commandHandler.registerCommand(new CmdSuffix(this));
+		commandHandler.registerCommand(new CmdSuffixReset(this));
+
+		// Register Events
+		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new ChatListener(this), this);
 
-		getCommand("prefix").setExecutor(new CmdPrefix(this));
-		getCommand("suffix").setExecutor(new CmdSuffix(this));
-
-		getCommand("prefixr").setExecutor(new CmdPrefixR(this));
-		getCommand("suffixr").setExecutor(new CmdSuffixR(this));
-
-		getCommand("suffixesplus").setExecutor(new CmdSP(this));
-
-		getCommand("listening").setExecutor(new CmdListening(this));
-		getCommand("listen").setExecutor(new CmdListen(this));
-
-		getCommand("prefix").setPermissionMessage(noperm);
-		getCommand("suffix").setPermissionMessage(noperm);
-		getCommand("prefixr").setPermissionMessage(noperm);
-		getCommand("suffixr").setPermissionMessage(noperm);
-
-		saveDefaultConfig();
-		loadConfig();
+		// Listening stuff
+		listenedToBy = new HashMap<String, List<String>>();
 
 		for (Player player : getServer().getOnlinePlayers())
 		{
 			createListenedToBy(player);
 		}
 
-		long finish = System.currentTimeMillis();
-
-		outConsole(getDescription().getFullName() + " has been enabled (" + (finish - start) + "ms)");
+		outConsole("{0} has been enabled ({1} ms)", getDescription().getFullName(), System.currentTimeMillis() - start);
 	}
 
 	@Override
@@ -79,96 +105,39 @@ public class SuffixesPlus extends JavaPlugin
 
 		listenedToBy.clear();
 
-		long finish = System.currentTimeMillis();
-
-		outConsole(getDescription().getFullName() + " has been disabled (" + (finish - start) + "ms)");
+		outConsole("{0} has been disabled ({1} ms)", getDescription().getFullName(), System.currentTimeMillis() - start);
 	}
 
+	// Console logging
 	public void outConsole(String string, Object... objects)
 	{
-		getLogger().info(FormatUtil.format(string, objects));
+		logHandler.log(string, objects);
 	}
 
 	public void outConsole(Level level, String string, Object... objects)
 	{
-		getLogger().log(level, FormatUtil.format(string, objects));
+		logHandler.log(level, string, objects);
 	}
 
-	/** Check for Permissions Plugin **/
-	private boolean permsPluginCheck(PluginManager pm)
-	{
-		if (pm.isPluginEnabled("GroupManager"))
-		{
-			outConsole("GroupManager found, using it for permissions hooks!");
-			return true;
-		}
-		else if (pm.isPluginEnabled("PermissionsEx"))
-		{
-			outConsole("PermissionsEx found, using it for permissions hooks!");
-			return true;
-		}
-		else
-		{
-			outConsole(Level.WARNING, "A permissions plugin is required for SuffixesPlus, please install one");
-			outConsole(Level.WARNING, "Disabling " + getDescription().getFullName());
-
-			getPluginLoader().disablePlugin(this);
-			return false;
-		}
-	}
-
-	/** Configuration Load **/
-	public void loadConfig()
-	{
-		maxsuffixlength = getConfig().getInt("maxsuffixlength");
-		maxprefixlength = getConfig().getInt("maxprefixlength");
-	}
-
-	/** Display Help **/
-	public void displayHelp(CommandSender sender)
-	{
-		List<String> lines = new ArrayList<String>();
-		lines.add(FormatUtil.format("&4=====[ &6{0} &4]=====", getDescription().getFullName()));
-		lines.add(FormatUtil.format("&c/<command> &6[optional] &4<required>"));
-		if (sender.hasPermission("sp.suffix"))
-		{
-			lines.add(FormatUtil.format("&c/suffix &6[player] &4<suffix> &eChanges your suffix"));
-		}
-
-		if (sender.hasPermission("sp.prefix"))
-		{
-			lines.add(FormatUtil.format("&c/prefix &6[player] &4<suffix> &eChanges your prefix"));
-		}
-
-		if (sender.hasPermission("sp.moderator"))
-		{
-			lines.add(FormatUtil.format("&c/suffixr &6[player] &eResets a player's suffix"));
-			lines.add(FormatUtil.format("&c/prefixr &6[player] &eResets a player's prefix"));
-		}
-
-		lines.add(FormatUtil.format("&c/listen &4<player> &eListen to another player"));
-		lines.add(FormatUtil.format("&c/listening &eCheck who you are listening to"));
-	}
-
-	/** Listening **/
+	// Listening
 	public boolean isListenedToBy(Player p1, Player p2)
 	{
-		return listenedToBy.get(p1).contains(p2);
+		return listenedToBy.get(p1.getName()).contains(p2.getName());
 	}
 
 	public void createListenedToBy(Player p1)
 	{
-		listenedToBy.put(p1, new ArrayList<Player>());
+		listenedToBy.put(p1.getName(), new ArrayList<String>());
 	}
 
 	public void removeListenedToBy(Player p2)
 	{
 		for (Player p1 : getServer().getOnlinePlayers())
 		{
-			if (listenedToBy.get(p1).contains(p2))
-				listenedToBy.get(p1).remove(p2);
+			if (listenedToBy.containsKey(p1.getName()))
+				listenedToBy.get(p1.getName()).remove(p2.getName());
 		}
 
-		listenedToBy.remove(p2);
+		listenedToBy.remove(p2.getName());
 	}
 }

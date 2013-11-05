@@ -1,123 +1,106 @@
-/**
- * (c) 2013 dmulloy2
- */
 package net.dmulloy2.suffixesplus.commands;
 
 import net.dmulloy2.suffixesplus.SuffixesPlus;
-import net.dmulloy2.suffixesplus.util.FormatUtil;
+import net.dmulloy2.suffixesplus.types.Permission;
 import net.dmulloy2.suffixesplus.util.Util;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
-
-import com.shadowvolt.shadowvolt.util.ColorUtil;
 
 /**
  * @author dmulloy2
  */
 
-public class CmdSuffix implements CommandExecutor
+public class CmdSuffix extends SuffixesPlusCommand
 {
-	private final SuffixesPlus plugin;
 	public CmdSuffix(SuffixesPlus plugin)
 	{
-		this.plugin = plugin;
+		super(plugin);
+		this.name = "suffix";
+		this.aliases.add("suf");
+		this.requiredArgs.add("suffix");
+		this.optionalArgs.add("player");
+		this.description = "Set your prefix";
+		this.permission = Permission.SUFFIX;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
+	public void perform()
 	{
 		if (args.length == 1)
 		{
 			if (sender instanceof Player)
 			{
+				int maxLength = plugin.getConfig().getInt("maxLengths.suffix");
 				String argscheck = args[0].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
-				if (argscheck.length() <= 10)
+				if (argscheck.length() <= maxLength)
 				{
 					String newSuffix = args[0];
+
 					PluginManager pm = plugin.getServer().getPluginManager();
-					if (pm.isPluginEnabled("Shadowvolt"))
+					if (!pm.isPluginEnabled("PExChat"))
 					{
-						newSuffix = ColorUtil.getRainbowizedString(newSuffix);
+						newSuffix = Util.getRainbowizedString(args[0]);
 					}
 
+					String command = plugin.getConfig().getString("commands.suffix");
+					command = command.replaceAll("%p", player.getName());
+					command = command.replaceAll("%s", newSuffix);
+
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-					if (pm.isPluginEnabled("GroupManager"))
-					{
-						plugin.getServer().dispatchCommand(ccs, "manuaddv " + sender.getName() + " suffix " + newSuffix + "&r");
-						sender.sendMessage(FormatUtil.format("&bYour suffix is now ''{0}&b''", newSuffix));
-					}
-					else if (pm.isPluginEnabled("PermissionsEx"))
-					{
-						plugin.getServer().dispatchCommand(ccs, "pex user " + sender.getName() + " suffix \"" + newSuffix + "\"&r");
-						sender.sendMessage(FormatUtil.format("&bYour suffix is now ''{0}&b''", newSuffix));
-					}
-					else
-					{
-						sender.sendMessage(ChatColor.RED + "Neither GroupManager nor PEX was found.");
-					}
+					plugin.getServer().dispatchCommand(ccs, command);
+
+					sendpMessage("&bYour suffix is now \"{0}\"", newSuffix);
 				}
 				else
 				{
-					sender.sendMessage(ChatColor.RED + "Error, your suffix is too long (Max 10 characters)");
+					err("Your suffix is too long (Max {0} characters)", maxLength);
 				}
 			}
 			else
 			{
-				sender.sendMessage(ChatColor.RED + "Console cannot have a suffix!");
+				err("Console cannot have a suffix!");
 			}
 		}
 		else if (args.length == 2)
 		{
-			if (sender.hasPermission("sp.others"))
+			if (plugin.getPermissionHandler().hasPermission(sender, Permission.SUFFIX_OTHERS))
 			{
 				Player target = Util.matchPlayer(args[0]);
 				if (target != null)
 				{
-					String newSuffix = args[1];
+					String newSuffix = args[0];
+
 					PluginManager pm = plugin.getServer().getPluginManager();
-					if (pm.isPluginEnabled("Shadowvolt"))
+					if (!pm.isPluginEnabled("PExChat"))
 					{
-						newSuffix = ColorUtil.getRainbowizedString(newSuffix);
+						newSuffix = Util.getRainbowizedString(newSuffix);
 					}
 
+					String command = plugin.getConfig().getString("commands.suffix");
+					command = command.replaceAll("%p", target.getName());
+					command = command.replaceAll("%s", newSuffix);
+
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-					if (pm.isPluginEnabled("GroupManager"))
-					{
-						plugin.getServer().dispatchCommand(ccs, "manuaddv " + target.getName() + " suffix " + newSuffix + "&r");
-						sender.sendMessage(FormatUtil.format("&b{0}''s suffix is now ''{1}&b''", target.getName(), newSuffix));
-						target.sendMessage(FormatUtil.format("&bYour suffix is now ''{0}&b''", newSuffix));
-					}
-					else if (pm.isPluginEnabled("PermissionsEx"))
-					{
-						plugin.getServer().dispatchCommand(ccs, "pex user " + target.getName() + " suffix \"" + newSuffix + "\"&r");
-						sender.sendMessage(FormatUtil.format("&a{0}''s suffix is now ''{1}&b''", target.getName(), newSuffix));
-						target.sendMessage(FormatUtil.format("&bYour suffix is now ''{0}&b''", newSuffix));
-					}
-					else
-					{
-						sender.sendMessage(ChatColor.RED + "Neither PEX nor GroupManager was found");
-					}
+					plugin.getServer().dispatchCommand(ccs, command);
+
+					sendpMessage("&b{0}\'s suffix is now \"{1}\"", target.getName(), newSuffix);
+					sendMessageTarget("&bYour suffix is now \"{1}\"", target, newSuffix);
 				}
 				else
 				{
-					sender.sendMessage(ChatColor.RED + "Player not found");
+					err("Player not found");
 				}
 			}
 			else
 			{
-				sender.sendMessage(ChatColor.RED + "You do not have permission to preform this command");
+				err("You do not have permission to preform this command");
 			}
 		}
 		else
 		{
-			sender.sendMessage(ChatColor.RED + "Invaild arguments count (/suf [player] <suffix>)");
+			invalidArgs();
 		}
-		return true;
 	}
 }

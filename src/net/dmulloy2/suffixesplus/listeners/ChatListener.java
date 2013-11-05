@@ -1,6 +1,8 @@
-package net.dmulloy2.suffixesplus;
+package net.dmulloy2.suffixesplus.listeners;
 
+import net.dmulloy2.suffixesplus.SuffixesPlus;
 import net.dmulloy2.suffixesplus.util.FormatUtil;
+import net.dmulloy2.suffixesplus.util.Util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -12,11 +14,14 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+/**
+ * @author dmulloy2
+ */
+
 public class ChatListener implements Listener
 {
 	private final SuffixesPlus plugin;
-
-	public ChatListener(final SuffixesPlus plugin)
+	public ChatListener(SuffixesPlus plugin)
 	{
 		this.plugin = plugin;
 	}
@@ -27,12 +32,13 @@ public class ChatListener implements Listener
 		if (!event.getMessage().contains(ChatColor.DARK_GREEN + "[" + ChatColor.AQUA + "LISTENING" + ChatColor.DARK_GREEN + "]"))
 		{
 			// Only send to players not listening
-			for (Player p2 : plugin.listenedToBy.get(event.getPlayer()))
+			for (String name : plugin.getListenedToBy().get(event.getPlayer()))
 			{
+				Player p2 = Util.matchPlayer(name);
 				event.getRecipients().remove(p2);
 			}
 
-			if (!plugin.listenedToBy.get(event.getPlayer()).isEmpty())
+			if (!plugin.getListenedToBy().get(event.getPlayer()).isEmpty())
 			{
 				event.getPlayer().chat(FormatUtil.format("&6&l[&bLISTENING&6&l] {0}&r", event.getMessage()));
 			}
@@ -40,8 +46,9 @@ public class ChatListener implements Listener
 		else
 		{
 			event.getRecipients().clear();
-			for (Player p2 : plugin.listenedToBy.get(event.getPlayer()))
+			for (String name : plugin.getListenedToBy().get(event.getPlayer()))
 			{
+				Player p2 = Util.matchPlayer(name);
 				event.getRecipients().add(p2);
 			}
 		}

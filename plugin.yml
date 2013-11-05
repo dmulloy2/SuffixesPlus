@@ -1,8 +1,8 @@
 name: SuffixesPlus
 main: net.dmulloy2.suffixesplus.SuffixesPlus
-version: 2.3.2
-description: Allows players to set their own prefix or suffix if they have the right permission
-softdepend: [GroupManager, PermissionsEx, Shadowvolt]
+version: 3.0
+author: dmulloy2
+description: Allows players to set their own prefix or suffix if they have the correct permissions
 commands:
   prefix:
     description: Sets your prefix
@@ -14,12 +14,12 @@ commands:
     permission: sp.suffix
     usage: /<command> <args>
     aliases: [suf]
-  prefixr:
+  prefixReset:
     description: Reset a player's prefix
     permission: sp.prefixr
     usage: /<command> <player>
     aliases: [prer]
-  suffixr:
+  suffixReset:
     description: Reset a player's suffix
     permission: sp.suffixr
     usage: /<command> <player>
@@ -36,11 +36,17 @@ commands:
     usage: /<command>
     aliases: [listeningto]
 permissions:
+  sp.admin:
+    description: Allows access to commands meant for Admins
+    children:
+      sp.prefix.others: true
+      sp.suffix.others: true
+      sp.moderator: true
   sp.moderator:
     description: Allows access to prefix and suffix reset
     children:
-      sp.prefixr: true
-      sp.suffixr: true
+      sp.prefix.reset: true
+      sp.suffix.reset: true
       sp.highroller: true
   sp.highroller:
     description: Allows access to suffix and prefix
@@ -51,9 +57,11 @@ permissions:
     default: false
   sp.prefix:
     default: false
-  sp.prefixr:
+  sp.prefix.reset:
     default: false
-  sp.suffixr:
+  sp.suffix.reset:
     default: false
-  sp.others:
+  sp.prefix.others:
+    default: false
+  sp.suffix.others:
     default: false

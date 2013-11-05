@@ -1,12 +1,22 @@
-#########################################################################################################
-#                                                                                                       #
-#                                     Suffixes Plus Configuration                                       #
-#                                         Created by: dmulloy2                                          #
-#                                                                                                       #
-#########################################################################################################
+#######################################################################
+#+-------------------------------------------------------------------+#
+#|                                                                   |#  
+#|                      SuffixesPlus Configuration                   |#
+#|                            By dmulloy2                            |#
+#|                                                                   |#
+#+-------------------------------------------------------------------+#
+#######################################################################
 
-#The max length a prefix can be (not counting color codes and brackets)
-maxprefixlength: 10
+# Maximum lengths
+maxLengths:
+  prefix: 10
+  suffix: 10
 
-#The max length a suffix can be (not counting color codes and brackets)
-maxsuffixlength: 10
+# Commands
+# %p is replaced with the player's name
+# %s with the new suffix
+commands:
+  prefix: 'manuaddv %p prefix %s'
+  prefixReset: 'manudelv %p prefix'
+  suffix: 'manuaddv %p suffix %s'
+  suffixReset: 'manudelv %p suffix'
