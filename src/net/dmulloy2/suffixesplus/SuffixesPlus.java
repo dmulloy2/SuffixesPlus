@@ -44,6 +44,11 @@ public class SuffixesPlus extends JavaPlugin
 	{
 		long start = System.currentTimeMillis();
 
+		// Register handlers
+		permissionHandler = new PermissionHandler();
+		commandHandler = new CommandHandler(this);
+		logHandler = new LogHandler(this);
+
 		// Configuration stuff
         File conf = new File(getDataFolder(), "config.yml");
         if (! conf.exists())
@@ -64,11 +69,6 @@ public class SuffixesPlus extends JavaPlugin
         }
 
         reloadConfig();
-
-		// Register handlers
-		permissionHandler = new PermissionHandler();
-		commandHandler = new CommandHandler(this);
-		logHandler = new LogHandler(this);
 
 		// Prefixed Commands
 		commandHandler.setCommandPrefix("suffixesplus");

@@ -23,27 +23,26 @@ public class CmdListening extends SuffixesPlusCommand
 	public void perform()
 	{
 		StringBuilder listening = new StringBuilder();
-		listening.append("&6You are listening to:&b ");
+		listening.append("&eYou are listening to: ");
 
-		boolean nobody = true;
 		for (Player p1 : plugin.getServer().getOnlinePlayers())
 		{
 			if (plugin.isListenedToBy(p1, player))
 			{
-				listening.append(p1.getDisplayName() + ", ");
-				nobody = false;
+				listening.append("&b" + p1.getName() + "&e, ");
 			}
 		}
 
-		if (!nobody)
+		if (listening.lastIndexOf("&e, ") >= 0)
 		{
-			listening.replace(listening.length() - 2, listening.length(), ".");
+			listening.delete(listening.lastIndexOf("&e"), listening.lastIndexOf(" "));
+			listening.append("&e.");
 		}
 		else
 		{
-			listening.append(" nobody.");
+			listening.append("&bnobody&e.");
 		}
 
-		sendMessage(listening.toString());
+		sendpMessage(listening.toString());
 	}
 }

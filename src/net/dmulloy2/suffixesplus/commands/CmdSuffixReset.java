@@ -34,9 +34,14 @@ public class CmdSuffixReset extends SuffixesPlusCommand
 				command = command.replaceAll("%p", player.getName());
 
 				ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-				plugin.getServer().dispatchCommand(ccs, command);
-
-				sendpMessage("&bYour suffix has been reset");
+				if (plugin.getServer().dispatchCommand(ccs, command))
+				{
+					sendpMessage("&eYour suffix has been reset");
+				}
+				else
+				{
+					err("Could not execute command! Consult an Administrator.");
+				}
 			}
 			else
 			{
@@ -52,14 +57,19 @@ public class CmdSuffixReset extends SuffixesPlusCommand
 				command = command.replaceAll("%p", target.getName());
 
 				ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-				plugin.getServer().dispatchCommand(ccs, command);
-
-				sendpMessage("&bYou have reset {0}\'s suffix", target.getName());
-				sendMessageTarget("&bYour suffix has been reset", target);
+				if (plugin.getServer().dispatchCommand(ccs, command))
+				{
+					sendpMessage("&eYou have reset {0}''s suffix", target.getName());
+					sendMessageTarget("&eYour suffix has been reset", target);
+				}
+				else
+				{
+					err("Could not execute command! Consult an Administrator.");
+				}
 			}
 			else
 			{
-				err("Player not found");
+				err("Player \"{0}\" not found!", args[0]);
 			}
 		}
 		else

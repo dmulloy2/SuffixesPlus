@@ -128,7 +128,7 @@ public abstract class SuffixesPlusCommand implements CommandExecutor
 	// Send message to another player
 	protected final void sendMessageTarget(String msg, Player target, Object... args)
 	{
-		sendpMessage(plugin.getPrefix() + FormatUtil.format(msg, args));
+		target.sendMessage(plugin.getPrefix() + FormatUtil.format(msg, args));
 	}
 
 	public final String getName()

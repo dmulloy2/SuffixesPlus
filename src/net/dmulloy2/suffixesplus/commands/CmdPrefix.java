@@ -49,13 +49,18 @@ public class CmdPrefix extends SuffixesPlusCommand
 					command = command.replaceAll("%s", newPrefix);
 
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-					plugin.getServer().dispatchCommand(ccs, command);
-
-					sendpMessage("&bYour prefix is now \"{0}\"", newPrefix);
+					if (plugin.getServer().dispatchCommand(ccs, command))
+					{
+						sendpMessage("&eYour prefix is now \"{0}&e\"", newPrefix);
+					}
+					else
+					{
+						err("Could not execute command! Consult an Administrator.");
+					}
 				}
 				else
 				{
-					err("Error, Your prefix is too long (Max {0} Characters)", maxlength);
+					err("Your prefix is too long! (Max {0} Characters)", maxlength);
 				}
 			}
 			else
@@ -70,10 +75,10 @@ public class CmdPrefix extends SuffixesPlusCommand
 				Player target = Util.matchPlayer(args[0]);
 				if (target != null)
 				{
-					String newPrefix = args[0];
+					String newPrefix = args[1];
 
 					PluginManager pm = plugin.getServer().getPluginManager();
-					if (!pm.isPluginEnabled("PExChat"))
+					if (! pm.isPluginEnabled("PExChat"))
 					{
 						newPrefix = Util.getRainbowizedString(newPrefix);
 					}
@@ -83,14 +88,19 @@ public class CmdPrefix extends SuffixesPlusCommand
 					command = command.replaceAll("%s", newPrefix);
 
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-					plugin.getServer().dispatchCommand(ccs, command);
-
-					sendpMessage("&b{0}\'s prefix is now \"{1}\"", target.getName(), newPrefix);
-					sendMessageTarget("&bYour prefix is now \"{1}\"", target, newPrefix);
+					if (plugin.getServer().dispatchCommand(ccs, command))
+					{
+						sendpMessage("&e{0}''s prefix is now \"{1}&e\"", target.getName(), newPrefix);
+						sendMessageTarget("&eYour prefix is now \"{0}&e\"", target, newPrefix);
+					}
+					else
+					{
+						err("Could not execute command! Consult an Administrator.");
+					}
 				}
 				else
 				{
-					err("Player not found");
+					err("Player \"{0}\" not found!", args[0]);
 				}
 			}
 			else

@@ -41,12 +41,12 @@ public class CmdListen extends SuffixesPlusCommand
 		if (!plugin.isListenedToBy(p1, p2))
 		{
 			plugin.getListenedToBy().get(p1.getName()).add(p2.getName());
-			sendpMessage("&2You are now listening to &b{0}&2.", p1.getName());
+			sendpMessage("&eYou are &anow &elistening to &b{0}&e.", p1.getName());
 		}
 		else
 		{
 			plugin.getListenedToBy().get(p1.getName()).remove(p2.getName());
-			sendpMessage("&9You are no longer listening to &b{0}&9.", p1.getName());
+			sendpMessage("&eYou are &cno longer &elistening to &b{0}&e.", p1.getName());
 		}
 	}
 }

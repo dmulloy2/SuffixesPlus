@@ -49,13 +49,18 @@ public class CmdSuffix extends SuffixesPlusCommand
 					command = command.replaceAll("%s", newSuffix);
 
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-					plugin.getServer().dispatchCommand(ccs, command);
-
-					sendpMessage("&bYour suffix is now \"{0}\"", newSuffix);
+					if (plugin.getServer().dispatchCommand(ccs, command))
+					{
+						sendpMessage("&eYour suffix is now \"{0}&e\"", newSuffix);
+					}
+					else
+					{
+						err("Could not execute command! Consult an Administrator.");
+					}
 				}
 				else
 				{
-					err("Your suffix is too long (Max {0} characters)", maxLength);
+					err("Your suffix is too long! (Max {0} characters)", maxLength);
 				}
 			}
 			else
@@ -70,7 +75,7 @@ public class CmdSuffix extends SuffixesPlusCommand
 				Player target = Util.matchPlayer(args[0]);
 				if (target != null)
 				{
-					String newSuffix = args[0];
+					String newSuffix = args[1];
 
 					PluginManager pm = plugin.getServer().getPluginManager();
 					if (!pm.isPluginEnabled("PExChat"))
@@ -83,14 +88,19 @@ public class CmdSuffix extends SuffixesPlusCommand
 					command = command.replaceAll("%s", newSuffix);
 
 					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-					plugin.getServer().dispatchCommand(ccs, command);
-
-					sendpMessage("&b{0}\'s suffix is now \"{1}\"", target.getName(), newSuffix);
-					sendMessageTarget("&bYour suffix is now \"{1}\"", target, newSuffix);
+					if (plugin.getServer().dispatchCommand(ccs, command))
+					{
+						sendpMessage("&e{0}''s suffix is now \"{1}&e\"", target.getName(), newSuffix);
+						sendMessageTarget("&eYour suffix is now \"{0}&e\"", target, newSuffix);
+					}
+					else
+					{
+						err("Could not execute command! Consult an Administrator.");
+					}
 				}
 				else
 				{
-					err("Player not found");
+					err("Player \"{0}\" not found!", args[0]);
 				}
 			}
 			else
