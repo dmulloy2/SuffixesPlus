@@ -14,12 +14,12 @@ commands:
     permission: sp.suffix
     usage: /<command> <args>
     aliases: [suf]
-  prefixReset:
+  prefixreset:
     description: Reset a player's prefix
     permission: sp.prefixr
     usage: /<command> <player>
     aliases: [prer]
-  suffixReset:
+  suffixreset:
     description: Reset a player's suffix
     permission: sp.suffixr
     usage: /<command> <player>
@@ -39,6 +39,7 @@ permissions:
   sp.admin:
     description: Allows access to commands meant for Admins
     children:
+      sp.reload: true
       sp.prefix.others: true
       sp.suffix.others: true
       sp.moderator: true
@@ -64,4 +65,6 @@ permissions:
   sp.prefix.others:
     default: false
   sp.suffix.others:
+    default: false
+  sp.reload:
     default: false

@@ -19,6 +19,8 @@ public class CmdHelp extends PaginatedCommand
 		this.optionalArgs.add("page");
 		this.description = "Shows " + plugin.getName() + " help";
 		this.linesPerPage = 6;
+
+		this.usesPrefix = true;
 	}
 
 	@Override
@@ -54,6 +56,14 @@ public class CmdHelp extends PaginatedCommand
 	private final List<String> buildHelpMenu()
 	{
 		List<String> ret = new ArrayList<String>();
+
+		for (SuffixesPlusCommand cmd : plugin.getCommandHandler().getRegisteredPrefixedCommands())
+		{
+			if (plugin.getPermissionHandler().hasPermission(sender, cmd.permission))
+			{
+				ret.add(cmd.getUsageTemplate(true));
+			}
+		}
 
 		for (SuffixesPlusCommand cmd : plugin.getCommandHandler().getRegisteredCommands())
 		{
