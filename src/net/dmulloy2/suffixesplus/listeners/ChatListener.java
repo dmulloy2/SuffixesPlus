@@ -29,24 +29,25 @@ public class ChatListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerChat(AsyncPlayerChatEvent event)
 	{
-		if (!event.getMessage().contains(ChatColor.DARK_GREEN + "[" + ChatColor.AQUA + "LISTENING" + ChatColor.DARK_GREEN + "]"))
+		Player p1 = event.getPlayer();
+		if (! event.getMessage().contains(ChatColor.DARK_GREEN + "[" + ChatColor.AQUA + "LISTENING" + ChatColor.DARK_GREEN + "]"))
 		{
 			// Only send to players not listening
-			for (String name : plugin.getListenedToBy().get(event.getPlayer()))
+			for (String name : plugin.getListenedToBy().get(p1.getName()))
 			{
 				Player p2 = Util.matchPlayer(name);
 				event.getRecipients().remove(p2);
 			}
 
-			if (!plugin.getListenedToBy().get(event.getPlayer()).isEmpty())
+			if (! plugin.getListenedToBy().get(p1.getName()).isEmpty())
 			{
-				event.getPlayer().chat(FormatUtil.format("&6&l[&bLISTENING&6&l] {0}&r", event.getMessage()));
+				p1.chat(FormatUtil.format("&6&l[&bLISTENING&6&l] {0}&r", event.getMessage()));
 			}
 		}
 		else
 		{
 			event.getRecipients().clear();
-			for (String name : plugin.getListenedToBy().get(event.getPlayer()))
+			for (String name : plugin.getListenedToBy().get(p1.getName()))
 			{
 				Player p2 = Util.matchPlayer(name);
 				event.getRecipients().add(p2);
@@ -69,7 +70,7 @@ public class ChatListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerKick(PlayerKickEvent event)
 	{
-		if (!event.isCancelled())
+		if (! event.isCancelled())
 		{
 			onPlayerDisconnect(event.getPlayer());
 		}
