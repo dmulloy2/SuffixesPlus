@@ -19,6 +19,7 @@ import net.dmulloy2.suffixesplus.handlers.CommandHandler;
 import net.dmulloy2.suffixesplus.handlers.LogHandler;
 import net.dmulloy2.suffixesplus.handlers.PermissionHandler;
 import net.dmulloy2.suffixesplus.listeners.ChatListener;
+import net.dmulloy2.suffixesplus.types.Reloadable;
 import net.dmulloy2.suffixesplus.util.FormatUtil;
 
 import org.bukkit.entity.Player;
@@ -29,7 +30,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author dmulloy2
  */
 
-public class SuffixesPlus extends JavaPlugin
+public class SuffixesPlus extends JavaPlugin implements Reloadable
 {
 	private @Getter PermissionHandler permissionHandler;
 	private @Getter CommandHandler commandHandler;
@@ -139,5 +140,11 @@ public class SuffixesPlus extends JavaPlugin
 		}
 
 		listenedToBy.remove(p2.getName());
+	}
+
+	@Override
+	public void reload()
+	{
+		reloadConfig();
 	}
 }
