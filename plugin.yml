@@ -1,27 +1,23 @@
 name: SuffixesPlus
 main: net.dmulloy2.suffixesplus.SuffixesPlus
-version: 3.0
+version: 3.0.1
 author: dmulloy2
 description: Allows players to set their own prefix or suffix if they have the correct permissions
 commands:
   prefix:
     description: Sets your prefix
-    permission: sp.prefix
     usage: /<command> <args>
     aliases: [pre]
   suffix:
     description: Sets your suffix
-    permission: sp.suffix
     usage: /<command> <args>
     aliases: [suf]
   prefixreset:
     description: Reset a player's prefix
-    permission: sp.prefixr
     usage: /<command> <player>
     aliases: [prer]
   suffixreset:
     description: Reset a player's suffix
-    permission: sp.suffixr
     usage: /<command> <player>
     aliases: [sufr]
   suffixesplus:
@@ -40,31 +36,35 @@ permissions:
     description: Allows access to commands meant for Admins
     children:
       sp.reload: true
-      sp.prefix.others: true
-      sp.suffix.others: true
       sp.moderator: true
+      sp.highroller: true
   sp.moderator:
     description: Allows access to prefix and suffix reset
     children:
       sp.prefix.reset: true
+      sp.prefix.reset.others: true
       sp.suffix.reset: true
-      sp.highroller: true
+      sp.suffix.reset.others: true
   sp.highroller:
     description: Allows access to suffix and prefix
     children:
       sp.prefix: true
       sp.suffix: true
-  sp.suffix:
-    default: false
   sp.prefix:
-    default: false
-  sp.prefix.reset:
-    default: false
-  sp.suffix.reset:
     default: false
   sp.prefix.others:
     default: false
+  sp.prefix.reset:
+    default: false
+  sp.prefix.reset.others:
+    default: false
+  sp.suffix:
+    default: false
   sp.suffix.others:
+    default: false
+  sp.suffix.reset:
+    default: false
+  sp.suffix.reset.others:
     default: false
   sp.reload:
     default: false

@@ -70,7 +70,7 @@ public class CmdSuffix extends SuffixesPlusCommand
 		}
 		else if (args.length == 2)
 		{
-			if (plugin.getPermissionHandler().hasPermission(sender, Permission.SUFFIX_OTHERS))
+			if (hasPermission(Permission.SUFFIX_OTHERS))
 			{
 				Player target = Util.matchPlayer(args[0]);
 				if (target != null)
@@ -78,7 +78,7 @@ public class CmdSuffix extends SuffixesPlusCommand
 					String newSuffix = args[1];
 
 					PluginManager pm = plugin.getServer().getPluginManager();
-					if (!pm.isPluginEnabled("PExChat"))
+					if (! pm.isPluginEnabled("PExChat"))
 					{
 						newSuffix = Util.getRainbowizedString(newSuffix);
 					}

@@ -17,7 +17,7 @@ public class CmdSuffixReset extends SuffixesPlusCommand
 	{
 		super(plugin);
 		this.name = "suffixreset";
-		this.aliases.add("suffixr");
+		this.aliases.add("sufr");
 		this.optionalArgs.add("player");
 		this.description = "Reset your suffix";
 		this.permission = Permission.SUFFIX_RESET;
@@ -50,26 +50,34 @@ public class CmdSuffixReset extends SuffixesPlusCommand
 		}
 		else if (args.length == 1)
 		{
+			// Check for the player first
 			Player target = Util.matchPlayer(args[0]);
-			if (target != null)
+			if (target == null)
 			{
-				String command = plugin.getConfig().getString("commands.suffixReset");
-				command = command.replaceAll("%p", target.getName());
+				err("Player \"{0}\" not found!", args[0]);
+				return;
+			}
 
-				ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-				if (plugin.getServer().dispatchCommand(ccs, command))
-				{
-					sendpMessage("&eYou have reset {0}''s suffix", target.getName());
-					sendMessageTarget("&eYour suffix has been reset", target);
-				}
-				else
-				{
-					err("Could not execute command! Consult an Administrator.");
-				}
+			// Permission check
+			if (! player.getName().equals(target.getName()) && ! hasPermission(Permission.SUFFIX_RESET_OTHERS))
+			{
+				err("You do not have permission to perform this command!");
+				return;
+			}
+
+			// Attempt to execute the command
+			String command = plugin.getConfig().getString("commands.suffixReset");
+			command = command.replaceAll("%p", target.getName());
+
+			ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
+			if (plugin.getServer().dispatchCommand(ccs, command))
+			{
+				sendpMessage("&eYou have reset {0}''s suffix", target.getName());
+				sendMessageTarget("&eYour suffix has been reset", target);
 			}
 			else
 			{
-				err("Player \"{0}\" not found!", args[0]);
+				err("Could not execute command! Consult an Administrator.");
 			}
 		}
 		else

@@ -70,7 +70,7 @@ public class CmdPrefix extends SuffixesPlusCommand
 		}
 		else if (args.length == 2)
 		{
-			if (plugin.getPermissionHandler().hasPermission(sender, Permission.PREFIX_OTHERS))
+			if (hasPermission(Permission.PREFIX_OTHERS))
 			{
 				Player target = Util.matchPlayer(args[0]);
 				if (target != null)

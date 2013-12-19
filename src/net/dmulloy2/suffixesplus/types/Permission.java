@@ -1,16 +1,25 @@
 package net.dmulloy2.suffixesplus.types;
 
+/**
+ * @author dmulloy2
+ */
+
 public enum Permission
 {
-	PREFIX, 
-	PREFIX_OTHERS, 
+	// Prefixes
+	PREFIX,
+	PREFIX_OTHERS,
 	PREFIX_RESET,
+	PREFIX_RESET_OTHERS,
 
-	SUFFIX, 
+	// Suffixes
+	SUFFIX,
 	SUFFIX_OTHERS,
 	SUFFIX_RESET,
+	SUFFIX_RESET_OTHERS,
 
-	RELOAD,
+	// Other
+	RELOAD, 
 	;
 
 	public String getNode()
