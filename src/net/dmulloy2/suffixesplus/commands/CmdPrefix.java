@@ -34,33 +34,35 @@ public class CmdPrefix extends SuffixesPlusCommand
 			{
 				int maxlength = plugin.getConfig().getInt("maxLengths.prefix");
 				String argscheck = args[0].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
-				if (argscheck.length() <= maxlength)
+
+				// Perform args check and enforce if they don't have PREFIX_OTHERS
+				// PREFIX_OTHERS acts as sort of a bypass permission in this case
+				if (argscheck.length() > maxlength && ! hasPermission(Permission.PREFIX_OTHERS))
 				{
-					String newPrefix = args[0];
+					err("Your prefix is too long! (Max {0} Characters)", maxlength);
+					return;
+				}
 
-					PluginManager pm = plugin.getServer().getPluginManager();
-					if (!pm.isPluginEnabled("PExChat"))
-					{
-						newPrefix = Util.getRainbowizedString(newPrefix);
-					}
+				String newPrefix = args[0];
 
-					String command = plugin.getConfig().getString("commands.prefix");
-					command = command.replaceAll("%p", player.getName());
-					command = command.replaceAll("%s", newPrefix);
+				PluginManager pm = plugin.getServer().getPluginManager();
+				if (! pm.isPluginEnabled("PExChat"))
+				{
+					newPrefix = Util.getRainbowizedString(newPrefix);
+				}
 
-					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-					if (plugin.getServer().dispatchCommand(ccs, command))
-					{
-						sendpMessage("&eYour prefix is now \"{0}&e\"", newPrefix);
-					}
-					else
-					{
-						err("Could not execute command! Consult an Administrator.");
-					}
+				String command = plugin.getConfig().getString("commands.prefix");
+				command = command.replaceAll("%p", player.getName());
+				command = command.replaceAll("%s", newPrefix);
+
+				ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
+				if (plugin.getServer().dispatchCommand(ccs, command))
+				{
+					sendpMessage("&eYour prefix is now \"{0}&e\"", newPrefix);
 				}
 				else
 				{
-					err("Your prefix is too long! (Max {0} Characters)", maxlength);
+					err("Could not execute command! Consult an Administrator.");
 				}
 			}
 			else
@@ -70,42 +72,52 @@ public class CmdPrefix extends SuffixesPlusCommand
 		}
 		else if (args.length == 2)
 		{
-			if (hasPermission(Permission.PREFIX_OTHERS))
+			Player target = Util.matchPlayer(args[0]);
+			if (target == null)
 			{
-				Player target = Util.matchPlayer(args[0]);
-				if (target != null)
-				{
-					String newPrefix = args[1];
+				err("Player \"{0}\" not found!", args[0]);
+				return;
+			}
 
-					PluginManager pm = plugin.getServer().getPluginManager();
-					if (! pm.isPluginEnabled("PExChat"))
-					{
-						newPrefix = Util.getRainbowizedString(newPrefix);
-					}
+			// Players can set their own prefix if they specify their name,
+			// If they specify someone else's name, they must have PREFIX_OTHERS
+			if (! sender.getName().equals(target.getName()) && ! hasPermission(Permission.PREFIX_OTHERS))
+			{
+				err("You do not have permission to perform this command!");
+				return;
+			}
 
-					String command = plugin.getConfig().getString("commands.prefix");
-					command = command.replaceAll("%p", target.getName());
-					command = command.replaceAll("%s", newPrefix);
+			String newPrefix = args[1];
 
-					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-					if (plugin.getServer().dispatchCommand(ccs, command))
-					{
-						sendpMessage("&e{0}''s prefix is now \"{1}&e\"", target.getName(), newPrefix);
-						sendMessageTarget("&eYour prefix is now \"{0}&e\"", target, newPrefix);
-					}
-					else
-					{
-						err("Could not execute command! Consult an Administrator.");
-					}
-				}
-				else
-				{
-					err("Player \"{0}\" not found!", args[0]);
-				}
+			int maxlength = plugin.getConfig().getInt("maxLengths.prefix");
+			String argscheck = args[0].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
+
+			// Perform args check and enforce if they don't have PREFIX_OTHERS
+			if (argscheck.length() > maxlength && ! hasPermission(Permission.PREFIX_OTHERS))
+			{
+				err("Your prefix is too long! (Max {0} Characters)", maxlength);
+				return;
+			}
+
+			PluginManager pm = plugin.getServer().getPluginManager();
+			if (! pm.isPluginEnabled("PExChat"))
+			{
+				newPrefix = Util.getRainbowizedString(newPrefix);
+			}
+
+			String command = plugin.getConfig().getString("commands.prefix");
+			command = command.replaceAll("%p", target.getName());
+			command = command.replaceAll("%s", newPrefix);
+
+			ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
+			if (plugin.getServer().dispatchCommand(ccs, command))
+			{
+				sendpMessage("&e{0}''s prefix is now \"{1}&e\"", target.getName(), newPrefix);
+				sendMessageTarget("&eYour prefix is now \"{0}&e\"", target, newPrefix);
 			}
 			else
 			{
-				err("You do not have permission to preform this command");
+				err("Could not execute command! Consult an Administrator.");
 			}
 		}
 		else

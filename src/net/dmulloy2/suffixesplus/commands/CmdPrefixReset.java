@@ -59,7 +59,7 @@ public class CmdPrefixReset extends SuffixesPlusCommand
 			}
 
 			// Permission check
-			if (! player.getName().equals(target.getName()) && ! hasPermission(Permission.PREFIX_RESET_OTHERS))
+			if (! sender.getName().equals(target.getName()) && ! hasPermission(Permission.PREFIX_RESET_OTHERS))
 			{
 				err("You do not have permission to perform this command!");
 				return;

@@ -34,33 +34,35 @@ public class CmdSuffix extends SuffixesPlusCommand
 			{
 				int maxLength = plugin.getConfig().getInt("maxLengths.suffix");
 				String argscheck = args[0].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
-				if (argscheck.length() <= maxLength)
+
+				// Perform args check and enforce if they don't have SUFFIX_OTHERS
+				// SUFFIX_OTHERS acts as sort of a bypass permission in this case
+				if (argscheck.length() > maxLength && !hasPermission(Permission.SUFFIX_OTHERS))
 				{
-					String newSuffix = args[0];
+					err("Your prefix is too long! (Max {0} Characters)", maxLength);
+					return;
+				}
 
-					PluginManager pm = plugin.getServer().getPluginManager();
-					if (!pm.isPluginEnabled("PExChat"))
-					{
-						newSuffix = Util.getRainbowizedString(args[0]);
-					}
+				String newSuffix = args[0];
 
-					String command = plugin.getConfig().getString("commands.suffix");
-					command = command.replaceAll("%p", player.getName());
-					command = command.replaceAll("%s", newSuffix);
+				PluginManager pm = plugin.getServer().getPluginManager();
+				if (! pm.isPluginEnabled("PExChat"))
+				{
+					newSuffix = Util.getRainbowizedString(args[0]);
+				}
 
-					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-					if (plugin.getServer().dispatchCommand(ccs, command))
-					{
-						sendpMessage("&eYour suffix is now \"{0}&e\"", newSuffix);
-					}
-					else
-					{
-						err("Could not execute command! Consult an Administrator.");
-					}
+				String command = plugin.getConfig().getString("commands.suffix");
+				command = command.replaceAll("%p", player.getName());
+				command = command.replaceAll("%s", newSuffix);
+
+				ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
+				if (plugin.getServer().dispatchCommand(ccs, command))
+				{
+					sendpMessage("&eYour suffix is now \"{0}&e\"", newSuffix);
 				}
 				else
 				{
-					err("Your suffix is too long! (Max {0} characters)", maxLength);
+					err("Could not execute command! Consult an Administrator.");
 				}
 			}
 			else
@@ -70,42 +72,52 @@ public class CmdSuffix extends SuffixesPlusCommand
 		}
 		else if (args.length == 2)
 		{
-			if (hasPermission(Permission.SUFFIX_OTHERS))
+			Player target = Util.matchPlayer(args[0]);
+			if (target == null)
 			{
-				Player target = Util.matchPlayer(args[0]);
-				if (target != null)
-				{
-					String newSuffix = args[1];
+				err("Player \"{0}\" not found!", args[0]);
+				return;
+			}
 
-					PluginManager pm = plugin.getServer().getPluginManager();
-					if (! pm.isPluginEnabled("PExChat"))
-					{
-						newSuffix = Util.getRainbowizedString(newSuffix);
-					}
+			// Players can set their own prefix if they specify their name,
+			// If they specify someone else's name, they must have SUFFIX_OTHERS
+			if (! sender.getName().equals(target.getName()) && ! hasPermission(Permission.SUFFIX_OTHERS))
+			{
+				err("You do not have permission to perform this command!");
+				return;
+			}
 
-					String command = plugin.getConfig().getString("commands.suffix");
-					command = command.replaceAll("%p", target.getName());
-					command = command.replaceAll("%s", newSuffix);
+			String newSuffix = args[1];
 
-					ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
-					if (plugin.getServer().dispatchCommand(ccs, command))
-					{
-						sendpMessage("&e{0}''s suffix is now \"{1}&e\"", target.getName(), newSuffix);
-						sendMessageTarget("&eYour suffix is now \"{0}&e\"", target, newSuffix);
-					}
-					else
-					{
-						err("Could not execute command! Consult an Administrator.");
-					}
-				}
-				else
-				{
-					err("Player \"{0}\" not found!", args[0]);
-				}
+			int maxlength = plugin.getConfig().getInt("maxLengths.suffix");
+			String argscheck = args[0].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
+
+			// Perform args check and enforce if they don't have SUFFIX_OTHERS
+			if (argscheck.length() > maxlength && ! hasPermission(Permission.SUFFIX_OTHERS))
+			{
+				err("Your suffix is too long! (Max {0} Characters)", maxlength);
+				return;
+			}
+
+			PluginManager pm = plugin.getServer().getPluginManager();
+			if (! pm.isPluginEnabled("PExChat"))
+			{
+				newSuffix = Util.getRainbowizedString(newSuffix);
+			}
+
+			String command = plugin.getConfig().getString("commands.suffix");
+			command = command.replaceAll("%p", target.getName());
+			command = command.replaceAll("%s", newSuffix);
+
+			ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
+			if (plugin.getServer().dispatchCommand(ccs, command))
+			{
+				sendpMessage("&e{0}''s suffix is now \"{1}&e\"", target.getName(), newSuffix);
+				sendMessageTarget("&eYour suffix is now \"{0}&e\"", target, newSuffix);
 			}
 			else
 			{
-				err("You do not have permission to preform this command");
+				err("Could not execute command! Consult an Administrator.");
 			}
 		}
 		else
