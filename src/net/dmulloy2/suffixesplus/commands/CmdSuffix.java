@@ -39,7 +39,7 @@ public class CmdSuffix extends SuffixesPlusCommand
 				// SUFFIX_OTHERS acts as sort of a bypass permission in this case
 				if (argscheck.length() > maxLength && !hasPermission(Permission.SUFFIX_OTHERS))
 				{
-					err("Your prefix is too long! (Max {0} Characters)", maxLength);
+					err("Your suffix is too long! (Max {0} Characters)", maxLength);
 					return;
 				}
 
@@ -87,17 +87,18 @@ public class CmdSuffix extends SuffixesPlusCommand
 				return;
 			}
 
-			String newSuffix = args[1];
-
-			int maxlength = plugin.getConfig().getInt("maxLengths.suffix");
-			String argscheck = args[0].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
+			int maxLength = plugin.getConfig().getInt("maxLengths.suffix");
+			String argscheck = args[1].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
 
 			// Perform args check and enforce if they don't have SUFFIX_OTHERS
-			if (argscheck.length() > maxlength && ! hasPermission(Permission.SUFFIX_OTHERS))
+			// SUFFIX_OTHERS acts as sort of a bypass permission in this case
+			if (argscheck.length() > maxLength && ! hasPermission(Permission.SUFFIX_OTHERS))
 			{
-				err("Your suffix is too long! (Max {0} Characters)", maxlength);
+				err("Your suffix is too long! (Max {0} Characters)", maxLength);
 				return;
 			}
+
+			String newSuffix = args[1];
 
 			PluginManager pm = plugin.getServer().getPluginManager();
 			if (! pm.isPluginEnabled("PExChat"))

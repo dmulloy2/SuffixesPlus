@@ -32,14 +32,14 @@ public class CmdPrefix extends SuffixesPlusCommand
 		{
 			if (sender instanceof Player)
 			{
-				int maxlength = plugin.getConfig().getInt("maxLengths.prefix");
+				int maxLength = plugin.getConfig().getInt("maxLengths.prefix");
 				String argscheck = args[0].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
 
 				// Perform args check and enforce if they don't have PREFIX_OTHERS
 				// PREFIX_OTHERS acts as sort of a bypass permission in this case
-				if (argscheck.length() > maxlength && ! hasPermission(Permission.PREFIX_OTHERS))
+				if (argscheck.length() > maxLength && ! hasPermission(Permission.PREFIX_OTHERS))
 				{
-					err("Your prefix is too long! (Max {0} Characters)", maxlength);
+					err("Your prefix is too long! (Max {0} Characters)", maxLength);
 					return;
 				}
 
@@ -87,17 +87,17 @@ public class CmdPrefix extends SuffixesPlusCommand
 				return;
 			}
 
-			String newPrefix = args[1];
-
-			int maxlength = plugin.getConfig().getInt("maxLengths.prefix");
-			String argscheck = args[0].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
+			int maxLength = plugin.getConfig().getInt("maxLengths.prefix");
+			String argscheck = args[1].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
 
 			// Perform args check and enforce if they don't have PREFIX_OTHERS
-			if (argscheck.length() > maxlength && ! hasPermission(Permission.PREFIX_OTHERS))
+			if (argscheck.length() > maxLength && ! hasPermission(Permission.PREFIX_OTHERS))
 			{
-				err("Your prefix is too long! (Max {0} Characters)", maxlength);
+				err("Your prefix is too long! (Max {0} Characters)", maxLength);
 				return;
 			}
+
+			String newPrefix = args[1];
 
 			PluginManager pm = plugin.getServer().getPluginManager();
 			if (! pm.isPluginEnabled("PExChat"))
