@@ -1,6 +1,6 @@
 name: SuffixesPlus
 main: net.dmulloy2.suffixesplus.SuffixesPlus
-version: 3.0.2
+version: 3.1
 author: dmulloy2
 description: Allows players to set their own prefix or suffix if they have the correct permissions
 commands:
