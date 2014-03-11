@@ -18,15 +18,10 @@
 package net.dmulloy2.suffixesplus;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 
 import lombok.Getter;
 import net.dmulloy2.suffixesplus.commands.CmdHelp;
-import net.dmulloy2.suffixesplus.commands.CmdListen;
-import net.dmulloy2.suffixesplus.commands.CmdListening;
 import net.dmulloy2.suffixesplus.commands.CmdPrefix;
 import net.dmulloy2.suffixesplus.commands.CmdPrefixReset;
 import net.dmulloy2.suffixesplus.commands.CmdReload;
@@ -35,12 +30,9 @@ import net.dmulloy2.suffixesplus.commands.CmdSuffixReset;
 import net.dmulloy2.suffixesplus.handlers.CommandHandler;
 import net.dmulloy2.suffixesplus.handlers.LogHandler;
 import net.dmulloy2.suffixesplus.handlers.PermissionHandler;
-import net.dmulloy2.suffixesplus.listeners.ChatListener;
 import net.dmulloy2.suffixesplus.types.Reloadable;
 import net.dmulloy2.suffixesplus.util.FormatUtil;
 
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -52,8 +44,6 @@ public class SuffixesPlus extends JavaPlugin implements Reloadable
 	private @Getter PermissionHandler permissionHandler;
 	private @Getter CommandHandler commandHandler;
 	private @Getter LogHandler logHandler;
-
-	private @Getter HashMap<String, List<String>> listenedToBy;
 
 	private @Getter String prefix = FormatUtil.format("&6[&4&lSP&6] ");
 
@@ -94,24 +84,10 @@ public class SuffixesPlus extends JavaPlugin implements Reloadable
 		commandHandler.registerPrefixedCommand(new CmdReload(this));
 
 		// Non Prefixed Commands
-		commandHandler.registerCommand(new CmdListen(this));
-		commandHandler.registerCommand(new CmdListening(this));
 		commandHandler.registerCommand(new CmdPrefix(this));
 		commandHandler.registerCommand(new CmdPrefixReset(this));
 		commandHandler.registerCommand(new CmdSuffix(this));
 		commandHandler.registerCommand(new CmdSuffixReset(this));
-
-		// Register Events
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new ChatListener(this), this);
-
-		// Listening stuff
-		listenedToBy = new HashMap<String, List<String>>();
-
-		for (Player player : getServer().getOnlinePlayers())
-		{
-			createListenedToBy(player);
-		}
 
 		outConsole("{0} has been enabled ({1} ms)", getDescription().getFullName(), System.currentTimeMillis() - start);
 	}
@@ -120,8 +96,6 @@ public class SuffixesPlus extends JavaPlugin implements Reloadable
 	public void onDisable()
 	{
 		long start = System.currentTimeMillis();
-
-		listenedToBy.clear();
 
 		outConsole("{0} has been disabled ({1} ms)", getDescription().getFullName(), System.currentTimeMillis() - start);
 	}
@@ -135,28 +109,6 @@ public class SuffixesPlus extends JavaPlugin implements Reloadable
 	public void outConsole(Level level, String string, Object... objects)
 	{
 		logHandler.log(level, string, objects);
-	}
-
-	// Listening
-	public boolean isListenedToBy(Player p1, Player p2)
-	{
-		return listenedToBy.get(p1.getName()).contains(p2.getName());
-	}
-
-	public void createListenedToBy(Player p1)
-	{
-		listenedToBy.put(p1.getName(), new ArrayList<String>());
-	}
-
-	public void removeListenedToBy(Player p2)
-	{
-		for (Player p1 : getServer().getOnlinePlayers())
-		{
-			if (listenedToBy.containsKey(p1.getName()))
-				listenedToBy.get(p1.getName()).remove(p2.getName());
-		}
-
-		listenedToBy.remove(p2.getName());
 	}
 
 	@Override

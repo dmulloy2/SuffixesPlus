@@ -23,14 +23,6 @@ commands:
   suffixesplus:
     description: SuffixesPlus root command
     usage: /<command>
-  listen:
-    description: Listen to another player
-    usage: /<command> <player>
-    aliases: [listento]
-  listening:
-    description: List players you are listening to
-    usage: /<command>
-    aliases: [listeningto]
 permissions:
   sp.admin:
     description: Allows access to commands meant for Admins
