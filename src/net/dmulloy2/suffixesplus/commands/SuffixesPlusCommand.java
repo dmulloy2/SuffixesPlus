@@ -105,7 +105,7 @@ public abstract class SuffixesPlusCommand implements CommandExecutor
 
 	protected final void err(String string, Object... objects)
 	{
-		sendpMessage("&c" + string, objects);
+		sendMessage("&cError: &4" + string, objects);
 	}
 
 	protected final void sendMessage(String msg, Object... args)
@@ -171,7 +171,6 @@ public abstract class SuffixesPlusCommand implements CommandExecutor
 		return false;
 	}
 
-
 	protected int argAsInt(int arg, boolean msg)
 	{
 		try
@@ -182,7 +181,7 @@ public abstract class SuffixesPlusCommand implements CommandExecutor
 		{
 			if (msg)
 				invalidArgs();
-			return -1;
+			return - 1;
 		}
 	}
 
@@ -196,7 +195,7 @@ public abstract class SuffixesPlusCommand implements CommandExecutor
 		{
 			if (msg)
 				invalidArgs();
-			return -1;
+			return - 1;
 		}
 	}
 

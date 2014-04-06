@@ -17,7 +17,7 @@ import org.bukkit.material.MaterialData;
 
 /**
  * Base Util class
- * 
+ *
  * @author dmulloy2
  */
 
@@ -27,7 +27,7 @@ public class Util
 
 	/**
 	 * Gets the Player from a given name
-	 * 
+	 *
 	 * @param name
 	 *        - Player name or partial name
 	 * @return Player from the given name, null if none exists
@@ -45,7 +45,7 @@ public class Util
 
 	/**
 	 * Gets the OfflinePlayer from a given name
-	 * 
+	 *
 	 * @param name
 	 *        - Player name or partial name
 	 * @return OfflinePlayer from the given name, null if none exists
@@ -67,7 +67,7 @@ public class Util
 
 	/**
 	 * Returns whether or not a player is banned
-	 * 
+	 *
 	 * @param p
 	 *        - OfflinePlayer to check for banned status
 	 * @return Whether or not the player is banned
@@ -79,7 +79,7 @@ public class Util
 
 	/**
 	 * Returns whether or not a player is banned
-	 * 
+	 *
 	 * @param p
 	 *        - Player name to check for banned status
 	 * @return Whether or not the player is banned
@@ -97,7 +97,7 @@ public class Util
 
 	/**
 	 * Returns a random integer out of x
-	 * 
+	 *
 	 * @param x
 	 *        - Integer the random should be out of
 	 * @return A random integer out of x
@@ -110,7 +110,7 @@ public class Util
 
 	/**
 	 * Plays an effect to all online players
-	 * 
+	 *
 	 * @param effect
 	 *        - Effect type to play
 	 * @param loc
@@ -129,7 +129,7 @@ public class Util
 
 	/**
 	 * Returns whether or not two locations are identical
-	 * 
+	 *
 	 * @param loc1
 	 *        - First location
 	 * @param loc2
@@ -138,15 +138,13 @@ public class Util
 	 */
 	public static boolean checkLocation(Location loc, Location loc2)
 	{
-		return loc.getBlockX() == loc2.getBlockX() 
-				&& loc.getBlockY() == loc2.getBlockY() 
-				&& loc.getBlockZ() == loc2.getBlockZ()
+		return loc.getBlockX() == loc2.getBlockX() && loc.getBlockY() == loc2.getBlockY() && loc.getBlockZ() == loc2.getBlockZ()
 				&& loc.getWorld().equals(loc2.getWorld());
 	}
 
 	/**
 	 * Turns a {@link Location} into a string for debug purpouses
-	 * 
+	 *
 	 * @param loc
 	 *        - {@link Location} to convert
 	 * @return String for debug purpouses
@@ -163,7 +161,7 @@ public class Util
 
 	/**
 	 * Returns a useful Stack Trace for debugging purpouses
-	 * 
+	 *
 	 * @param e
 	 *        - Underlying {@link Throwable}
 	 * @param circumstance
@@ -196,7 +194,7 @@ public class Util
 	 * This fixes concurrency for some reason
 	 * <p>
 	 * Should not be used to edit the base List
-	 * 
+	 *
 	 * @param list
 	 *        - Base {@link List}
 	 * @return a new list from the given list
@@ -208,7 +206,7 @@ public class Util
 
 	/**
 	 * Constructs a new {@link List} paramaterized with <code>T</code>
-	 * 
+	 *
 	 * @param objects
 	 *        - Array of <code>T</code> to create the list with
 	 * @return a new {@link List} from the given objects
@@ -259,7 +257,7 @@ public class Util
 				if (s != null)
 				{
 					int index = 0;
-					while ((index < s.length()) && (s.charAt(index) != '&'))
+					while (index < s.length() && s.charAt(index) != '&')
 					{
 						ret.append(rainbowCodes[index % rainbowCodes.length]);
 						ret.append(s.charAt(index));

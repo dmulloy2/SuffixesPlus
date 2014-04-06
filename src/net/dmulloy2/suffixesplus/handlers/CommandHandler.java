@@ -6,8 +6,8 @@ import java.util.List;
 import net.dmulloy2.suffixesplus.SuffixesPlus;
 import net.dmulloy2.suffixesplus.commands.CmdHelp;
 import net.dmulloy2.suffixesplus.commands.SuffixesPlusCommand;
+import net.dmulloy2.suffixesplus.util.FormatUtil;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,17 +19,16 @@ import org.bukkit.command.PluginCommand;
 
 public class CommandHandler implements CommandExecutor
 {
-	private final SuffixesPlus plugin;
-	// Only need the name of command prefix - all other aliases listed in
-	// plugin.yml will be usable
 	private String commandPrefix;
 	private List<SuffixesPlusCommand> registeredPrefixedCommands;
 	private List<SuffixesPlusCommand> registeredCommands;
 
+	private final SuffixesPlus plugin;
+
 	public CommandHandler(SuffixesPlus plugin)
 	{
 		this.plugin = plugin;
-		registeredCommands = new ArrayList<SuffixesPlusCommand>();
+		this.registeredCommands = new ArrayList<SuffixesPlusCommand>();
 	}
 
 	public void registerCommand(SuffixesPlusCommand command)
@@ -70,7 +69,7 @@ public class CommandHandler implements CommandExecutor
 	public void setCommandPrefix(String commandPrefix)
 	{
 		this.commandPrefix = commandPrefix;
-		registeredPrefixedCommands = new ArrayList<SuffixesPlusCommand>();
+		this.registeredPrefixedCommands = new ArrayList<SuffixesPlusCommand>();
 		plugin.getCommand(commandPrefix).setExecutor(this);
 	}
 
@@ -99,8 +98,7 @@ public class CommandHandler implements CommandExecutor
 				}
 			}
 
-			sender.sendMessage(plugin.getPrefix() + ChatColor.RED + "Unknown SuffixesPlus command \"" + args[0]
-					+ "\". Try /suffixesplus help!");
+			sender.sendMessage(FormatUtil.format("&cError: &4Unknown SuffixesPlus command \"&c{0}&4\"! Try &c/suffixesplus help&4!"));
 		}
 		else
 		{

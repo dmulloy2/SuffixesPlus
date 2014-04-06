@@ -54,7 +54,7 @@ public class CmdSuffixReset extends SuffixesPlusCommand
 			Player target = Util.matchPlayer(args[0]);
 			if (target == null)
 			{
-				err("Player \"{0}\" not found!", args[0]);
+				err("Player \"&c{0}&4\" not found!", args[0]);
 				return;
 			}
 

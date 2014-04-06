@@ -33,17 +33,17 @@ public class CmdPrefix extends SuffixesPlusCommand
 			if (sender instanceof Player)
 			{
 				int maxLength = plugin.getConfig().getInt("maxLengths.prefix");
-				String argscheck = args[0].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
-
-				// Perform args check and enforce if they don't have PREFIX_OTHERS
-				// PREFIX_OTHERS acts as sort of a bypass permission in this case
-				if (argscheck.length() > maxLength && ! hasPermission(Permission.PREFIX_OTHERS))
-				{
-					err("Your prefix is too long! (Max {0} Characters)", maxLength);
-					return;
-				}
 
 				String newPrefix = args[0];
+				String argsCheck = newPrefix.replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "")
+						.replaceAll("\\]", "");
+
+				// Perform and enforce args check
+				if (argsCheck.length() > maxLength)
+				{
+					err("Your prefix is too long! (Max &c{0} &4characters)", maxLength);
+					return;
+				}
 
 				PluginManager pm = plugin.getServer().getPluginManager();
 				if (! pm.isPluginEnabled("PExChat"))
@@ -75,7 +75,7 @@ public class CmdPrefix extends SuffixesPlusCommand
 			Player target = Util.matchPlayer(args[0]);
 			if (target == null)
 			{
-				err("Player \"{0}\" not found!", args[0]);
+				err("Player \"&c{0}&4\" not found!", args[0]);
 				return;
 			}
 
@@ -88,16 +88,16 @@ public class CmdPrefix extends SuffixesPlusCommand
 			}
 
 			int maxLength = plugin.getConfig().getInt("maxLengths.prefix");
-			String argscheck = args[1].replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
 
-			// Perform args check and enforce if they don't have PREFIX_OTHERS
-			if (argscheck.length() > maxLength && ! hasPermission(Permission.PREFIX_OTHERS))
+			String newPrefix = args[0];
+			String argsCheck = newPrefix.replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
+
+			// Perform and enforce args check
+			if (argsCheck.length() > maxLength)
 			{
-				err("Your prefix is too long! (Max {0} Characters)", maxLength);
+				err("Your prefix is too long! (Max &c{0} &4characters)", maxLength);
 				return;
 			}
-
-			String newPrefix = args[1];
 
 			PluginManager pm = plugin.getServer().getPluginManager();
 			if (! pm.isPluginEnabled("PExChat"))

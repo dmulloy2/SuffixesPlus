@@ -19,7 +19,7 @@ public enum Permission
 	SUFFIX_RESET_OTHERS,
 
 	// Other
-	RELOAD, 
+	RELOAD,
 	;
 
 	public String getNode()

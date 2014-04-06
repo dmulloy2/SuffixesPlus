@@ -36,7 +36,7 @@ public class CmdPrefixReset extends SuffixesPlusCommand
 				ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
 				if (plugin.getServer().dispatchCommand(ccs, command))
 				{
-					sendpMessage("&eYour prefix has been reset");
+					sendpMessage("&eYour prefix has been reset!");
 				}
 				else
 				{
@@ -54,7 +54,7 @@ public class CmdPrefixReset extends SuffixesPlusCommand
 			Player target = Util.matchPlayer(args[0]);
 			if (target == null)
 			{
-				err("Player \"{0}\" not found!", args[0]);
+				err("Player \"&c{0}&4\" not found!", args[0]);
 				return;
 			}
 
@@ -72,8 +72,8 @@ public class CmdPrefixReset extends SuffixesPlusCommand
 			ConsoleCommandSender ccs = plugin.getServer().getConsoleSender();
 			if (plugin.getServer().dispatchCommand(ccs, command))
 			{
-				sendpMessage("&eYou have reset {0}''s prefix", target.getName());
-				sendMessageTarget("&eYour prefix has been reset", target);
+				sendpMessage("&eYou have reset {0}''s prefix!", target.getName());
+				sendMessageTarget("&eYour prefix has been reset!", target);
 			}
 			else
 			{

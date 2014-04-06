@@ -11,13 +11,9 @@ import org.bukkit.entity.Player;
 
 public class PermissionHandler
 {
-	public PermissionHandler()
-	{
-	}
-	
 	public boolean hasPermission(CommandSender sender, Permission permission)
 	{
-		return (permission == null) ? true : hasPermission(sender, getPermissionString(permission));
+		return permission == null || hasPermission(sender, getPermissionString(permission));
 	}
 
 	public boolean hasPermission(CommandSender sender, String permission)
@@ -25,7 +21,7 @@ public class PermissionHandler
 		if (sender instanceof Player)
 		{
 			Player p = (Player) sender;
-			return (p.hasPermission(permission) || p.isOp());
+			return p.hasPermission(permission) || p.isOp();
 		}
 
 		return true;
