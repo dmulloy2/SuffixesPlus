@@ -89,7 +89,7 @@ public class CmdPrefix extends SuffixesPlusCommand
 
 			int maxLength = plugin.getConfig().getInt("maxLengths.prefix");
 
-			String newPrefix = args[0];
+			String newPrefix = args[1];
 			String argsCheck = newPrefix.replaceAll("(?i)&([a-f0-9])", "").replaceAll("&", "").replaceAll("\\[", "").replaceAll("\\]", "");
 
 			// Perform and enforce args check
